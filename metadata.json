@@ -1,0 +1,6 @@
+{
+  "name": "Unique Tany Leather Atelier",
+  "description": "An exquisite slow-craft leather atelier store featuring bespoke wallets, watch straps, and fine bags with custom stitching and monogramming options.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

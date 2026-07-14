@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-luxury-gold: #8B735B;
+  --color-luxury-gold-dark: #6F5944;
+  --color-luxury-cream: #F7F6F2;
+  --color-luxury-sand: #E8E4DF;
+  --color-luxury-charcoal: #1A1A1A;
+  --color-luxury-orange: #8B735B; /* Earthy artistic clay accent instead of bright orange */
+  --color-luxury-tan: #8B735B;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-luxury-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-luxury-gold);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-luxury-gold-dark);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-luxury-cream);
+  color: var(--color-luxury-charcoal);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-luxury-serif {
+  font-family: var(--font-serif);
+}
+
+.tracking-luxury {
+  letter-spacing: 0.15em;
+}
+
+.tracking-luxury-wide {
+  letter-spacing: 0.25em;
+}
