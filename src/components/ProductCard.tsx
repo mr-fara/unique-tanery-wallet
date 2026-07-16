@@ -67,19 +67,19 @@ export default function ProductCard({
             e.stopPropagation();
             onToggleWishlist(product.id);
           }}
-          className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-luxury-orange shadow-sm transition-all duration-300"
+          className="absolute top-2 right-2 z-10 p-1 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-luxury-orange shadow-sm transition-all duration-300"
           title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
         >
           <Heart
-            size={16}
-            className={`transition-colors ${isWishlisted ? 'fill-luxury-orange text-luxury-orange' : ''}`}
+            size={14}
+            className={`transition-colors ${isWishlisted ? 'fill-pink-700 text-luxury-orange' : ''}`}
           />
         </button>
 
         {/* Bestseller Badge */}
         {product.isBestseller && (
-          <span className="absolute top-3 left-3 z-10 bg-luxury-gold text-luxury-cream text-[8px] font-semibold tracking-widest uppercase px-2 py-1">
-            Atelier Best-seller
+          <span className="absolute top-2 left-1 z-10 bg-luxury-gold text-luxury-cream text-[8px] lg:text-[8px] font-bold tracking-widest uppercase px-2 py-1">
+            Best-seller
           </span>
         )}
 

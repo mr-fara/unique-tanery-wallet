@@ -157,90 +157,101 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
               initial={{ opacity: 0, scale: 0.97, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1.1, ease: 'easeOut' }}
-              className="relative overflow-hidden shadow-2xl"
-              style={{ aspectRatio: '4/3' }}
+              className="relative w-full shadow-2xl overflow-hidden"
             >
-              {/* Main Image */}
-              <img
-                src="/src/assets/images/hero_leather_craft_1783975841486.jpg"
-                alt="Unique Tany Saddle Stitching Handcrafted Leather Wallet"
-                className="object-cover w-full h-full brightness-[0.92] contrast-[1.03] scale-[1.01] hover:scale-[1.04] transition-transform duration-700"
-              />
+              {/*
+                ── Responsive aspect-ratio wrapper ──
+                mobile  (default) : 4/3  → 75vw tall feel, not too short
+                sm (640px+)       : 16/9 → cinematic widescreen
+                lg (1024px+)      : 4/3  → taller to balance the text column
+              */}
+              <div className="relative w-full aspect-[3/3.5] sm:aspect-[16/9] lg:aspect-[4/3]">
 
-              {/* Gradient overlay bottom */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+                {/* Video */}
+                <video
+                  src="/image/crafting.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover brightness-[0.92] contrast-[1.03]"
+                />
 
-              {/* Floating Craft Badge — top left */}
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.8 }}
-                className="absolute top-3 left-3 sm:top-5 sm:left-5 bg-amber-800 text-amber-50 px-2.5 sm:px-3 py-1.5 sm:py-2 flex items-center gap-2"
-              >
-                <span className="text-[8px] sm:text-[9px] tracking-[0.2em] font-semibold uppercase">
-                  Fait Main
-                </span>
-                <span className="block w-px h-3 bg-amber-500/60" />
-                <span className="text-[8px] sm:text-[9px] tracking-[0.15em] font-light opacity-80">
-                  Since 2012
-                </span>
-              </motion.div>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent pointer-events-none z-[1]" />
 
-              {/* Floating Info Card — bottom right */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 1.0 }}
-                className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 bg-white/95 backdrop-blur-md p-3 sm:p-4 md:p-5 max-w-[160px] sm:max-w-[210px] md:max-w-[240px] border border-stone-100 shadow-lg text-left hidden xs:block"
-              >
-                <p className="text-[8px] sm:text-[9px] tracking-[0.25em] text-amber-800 font-semibold uppercase mb-1">
-                  Featured Craft
-                </p>
-                <h3 className="text-[11px] sm:text-xs font-semibold text-neutral-800 uppercase tracking-wider leading-snug mb-1.5 sm:mb-2">
-                  The French Linen Stitch
-                </h3>
-                <p className="text-[9px] sm:text-[10px] text-neutral-500 font-light leading-relaxed hidden sm:block">
-                  Every stitch is made by hand using beeswax-coated linen
-                  thread, creating a diagonal lock seam.
-                </p>
-                <div className="mt-2 sm:mt-3 flex items-center gap-1.5">
-                  <span className="block w-5 h-px bg-amber-700" />
-                  <span className="text-[8px] tracking-[0.2em] text-amber-800 uppercase font-medium">
-                    Discover
+                {/* Floating Craft Badge — top left */}
+                <motion.div
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 0.8 }}
+                  className="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-5 lg:left-5 bg-amber-800 text-amber-50 px-2.5 sm:px-3 py-1.5 sm:py-2 flex items-center gap-2 z-[2]"
+                >
+                  <span className="text-[8px] sm:text-[9px] tracking-[0.2em] font-semibold uppercase">
+                    Fait Main
                   </span>
-                </div>
-              </motion.div>
+                  <span className="block w-px h-3 bg-amber-500/60" />
+                  <span className="text-[8px] sm:text-[9px] tracking-[0.15em] font-light opacity-80">
+                    Since 2012
+                  </span>
+                </motion.div>
 
-              {/* Stats strip — bottom full width on mobile */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.1 }}
-                className="absolute bottom-0 left-0 right-0 bg-neutral-900/80 backdrop-blur-sm px-4 py-3 flex justify-around sm:hidden"
-              >
-                {[
-                  { value: '12+', label: 'Years' },
-                  { value: '100%', label: 'Hand-made' },
-                  { value: '50+', label: 'Countries' },
-                ].map(({ value, label }) => (
-                  <div key={label} className="text-center">
-                    <p className="text-[13px] font-semibold text-amber-400 tracking-wider">
-                      {value}
-                    </p>
-                    <p className="text-[8px] text-neutral-400 tracking-widest uppercase">
-                      {label}
-                    </p>
+                {/* Floating Info Card — bottom right (hidden on xs, visible sm+) */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 1.0 }}
+                  className="absolute bottom-12 right-3 sm:bottom-4 sm:right-4 lg:bottom-5 lg:right-5 bg-white/95 backdrop-blur-md p-3 sm:p-4 md:p-5 w-[150px] sm:w-[200px] md:w-[230px] lg:w-[240px] border border-stone-100 shadow-lg text-left hidden sm:block z-[2]"
+                >
+                  <p className="text-[8px] sm:text-[9px] tracking-[0.25em] text-amber-800 font-semibold uppercase mb-1">
+                    Featured Craft
+                  </p>
+                  <h3 className="text-[10px] sm:text-[11px] md:text-xs font-semibold text-neutral-800 uppercase tracking-wider leading-snug mb-1.5 sm:mb-2">
+                    The French Linen Stitch
+                  </h3>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-500 font-light leading-relaxed hidden md:block">
+                    Every stitch is made by hand using beeswax-coated linen
+                    thread, creating a diagonal lock seam.
+                  </p>
+                  <div className="mt-2 sm:mt-3 flex items-center gap-1.5">
+                    <span className="block w-5 h-px bg-amber-700" />
+                    <span className="text-[8px] tracking-[0.2em] text-amber-800 uppercase font-medium">
+                      Discover
+                    </span>
                   </div>
-                ))}
-              </motion.div>
+                </motion.div>
+
+                {/* Stats strip — mobile only, sits at bottom of video */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.1 }}
+                  className="absolute bottom-0 left-0 right-0 bg-neutral-900/80 backdrop-blur-sm px-4 py-2.5 flex justify-around sm:hidden z-[2]"
+                >
+                  {[
+                    { value: '12+', label: 'Years' },
+                    { value: '100%', label: 'Hand-made' },
+                    { value: '50+', label: 'Countries' },
+                  ].map(({ value, label }) => (
+                    <div key={label} className="text-center">
+                      <p className="text-[12px] font-semibold text-amber-400 tracking-wider">
+                        {value}
+                      </p>
+                      <p className="text-[7px] text-neutral-400 tracking-widest uppercase mt-0.5">
+                        {label}
+                      </p>
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
             </motion.div>
 
-            {/* Stats strip — desktop below image */}
+            {/* Stats strip — sm+ below video */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.2 }}
-              className="hidden sm:grid grid-cols-3 divide-x divide-stone-200 border border-stone-200 bg-white mt-4"
+              className="hidden sm:grid grid-cols-3 divide-x divide-stone-200 border border-stone-200 bg-white mt-0 border-t-0"
             >
               {[
                 { value: '12+', label: 'Years of Craft' },
@@ -249,7 +260,7 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
               ].map(({ value, label }) => (
                 <div
                   key={label}
-                  className="text-center py-3 sm:py-4 px-2 group hover:bg-stone-50 transition-colors duration-300"
+                  className="text-center py-3 sm:py-3.5 md:py-4 px-2 group hover:bg-stone-50 transition-colors duration-300"
                 >
                   <p className="text-base sm:text-lg md:text-xl font-light text-amber-800 tracking-wider">
                     {value}

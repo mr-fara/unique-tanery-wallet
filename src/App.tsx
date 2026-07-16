@@ -12,6 +12,10 @@ import { Product, ProductColor, CustomizationOptions, CartItem } from './types';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, SlidersHorizontal, ArrowRight, X } from 'lucide-react';
 
+// ─── Background Image ─────────────────────────────────────────────────────────
+const BG_IMAGE = '/image/98178753247.png';
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('all');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -116,404 +120,440 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1C1C1C] selection:bg-[#C9A96E] selection:text-white flex flex-col">
+    <div className="relative min-h-screen bg-[#FAF7F2] text-[#1C1C1C] selection:bg-[#C9A96E] selection:text-white flex flex-col">
 
-      {/* ── Header ── */}
-      <Header
-        activeTab={activeTab}
-        setActiveTab={(tab) => {
-          setActiveTab(tab);
-          setTimeout(() => scrollToSection('main-focus'), 100);
+      {/* ── Full-Page Background Image ───────────────────────────────────────── */}
+      {/*
+       *  • fixed   → stays in place during scroll
+       *  • inset-0 → covers the full viewport
+       *  • object-cover → fills without distortion
+       *  • opacity-[0.10] → subtle luxury feel, cream page color still dominant
+       *  • mix-blend-multiply → warm integration with #FAF7F2 base
+       *  • pointer-events-none → invisible to interaction
+       *  • z-0 → behind all content
+       */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
+      >
+        <img
+          src={BG_IMAGE}
+          alt=""
+          className="w-full h-full object-cover mix-blend-multiply"
+          style={{ opacity: 0.10 }}
+          draggable={false}
+        />
+      </div>
+
+      {/* ── Gold vignette edges ────────────────────────────────────────────────
+           Inward warm shadow to frame the viewport — classic luxury-print look. */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse at center, transparent 55%, rgba(180,140,80,0.09) 100%)',
         }}
-        cartCount={cartCount}
-        openCart={() => setCartOpen(true)}
-        openWishlist={() => setWishlistOpen(true)}
-        wishlistCount={wishlist.length}
       />
 
-      {/* ── Hero (all tab only) ── */}
-      <AnimatePresence mode="wait">
-        {activeTab === 'all' && (
-          <motion.div
-            key="hero"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Hero
-              onExploreClick={() => scrollToSection('catalog-grid-top')}
-              onAtelierClick={() => {
-                setActiveTab('atelier');
-                setTimeout(() => scrollToSection('main-focus'), 100);
-              }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ── All page content sits above the background (z-10+) ───────────────── */}
+      <div className="relative z-10 flex flex-col min-h-screen">
 
-      {/* ── Main Content ── */}
-      <main id="main-focus" className="flex-grow w-full">
+        {/* ── Header ── */}
+        <Header
+          activeTab={activeTab}
+          setActiveTab={(tab) => {
+            setActiveTab(tab);
+            setTimeout(() => scrollToSection('main-focus'), 100);
+          }}
+          cartCount={cartCount}
+          openCart={() => setCartOpen(true)}
+          openWishlist={() => setWishlistOpen(true)}
+          wishlistCount={wishlist.length}
+        />
 
-        {/* Atelier */}
+        {/* ── Hero (all tab only) ── */}
         <AnimatePresence mode="wait">
-          {activeTab === 'atelier' && (
+          {activeTab === 'all' && (
             <motion.div
-              key="atelier"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.45 }}
-            >
-              <AtelierSection />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Commissions */}
-        <AnimatePresence mode="wait">
-          {activeTab === 'commissions' && (
-            <motion.div
-              key="commissions"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.45 }}
-            >
-              <CustomCommission />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* ── Catalog Grid ── */}
-        <AnimatePresence mode="wait">
-          {activeTab !== 'atelier' && activeTab !== 'commissions' && (
-            <motion.div
-              key="catalog"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
+              key="hero"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.45 }}
-              className="w-full"
-              id="catalog-grid-top"
+              transition={{ duration: 0.4 }}
             >
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 xl:px-8 py-10 sm:py-14 lg:py-16">
+              <Hero
+                onExploreClick={() => scrollToSection('catalog-grid-top')}
+                onAtelierClick={() => {
+                  setActiveTab('atelier');
+                  setTimeout(() => scrollToSection('main-focus'), 100);
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-                {/* ── Section Header ── */}
-                <div className="mb-8 sm:mb-10">
-                  {/* Top row: label + result count */}
-                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-6 mb-5">
-                    <div className="space-y-1.5">
-                      <span className="inline-block text-[9px] xs:text-[10px] tracking-[0.25em] text-[#B8860B] font-semibold uppercase">
-                        Maroquinerie d'excellence
-                      </span>
-                      <h2 className="text-2xl xs:text-3xl sm:text-3xl lg:text-4xl font-normal tracking-wide text-[#1C1C1C] font-serif uppercase leading-tight">
-                        {getCatalogTitle()}
-                      </h2>
-                      <p className="text-[11px] sm:text-xs text-[#9E9E9E] font-light max-w-md leading-relaxed">
-                        Each model is designed around absolute lines, featuring selected leather, raw beeswax edge finishes, and the iconic linen saddle-stitch.
-                      </p>
-                    </div>
+        {/* ── Main Content ── */}
+        <main id="main-focus" className="flex-grow w-full">
 
-                    {/* Result count badge */}
-                    <div className="self-start sm:self-end shrink-0">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E8E0D4] text-[10px] font-semibold tracking-wider text-[#9E9E9E] uppercase">
-                        <span className="text-[#C9A96E] font-bold text-xs">{filteredProducts.length}</span>
-                        {filteredProducts.length === 1 ? 'Piece' : 'Pieces'}
-                      </span>
+          {/* Atelier */}
+          <AnimatePresence mode="wait">
+            {activeTab === 'atelier' && (
+              <motion.div
+                key="atelier"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.45 }}
+              >
+                <AtelierSection />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Commissions */}
+          <AnimatePresence mode="wait">
+            {activeTab === 'commissions' && (
+              <motion.div
+                key="commissions"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.45 }}
+              >
+                <CustomCommission />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ── Catalog Grid ── */}
+          <AnimatePresence mode="wait">
+            {activeTab !== 'atelier' && activeTab !== 'commissions' && (
+              <motion.div
+                key="catalog"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45 }}
+                className="w-full"
+                id="catalog-grid-top"
+              >
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 xl:px-8 py-10 sm:py-14 lg:py-16">
+
+                  {/* ── Section Header ── */}
+                  <div className="mb-8 sm:mb-10">
+                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-6 mb-5">
+                      <div className="space-y-1.5">
+                        <span className="inline-block text-[9px] xs:text-[10px] tracking-[0.25em] text-[#B8860B] font-semibold uppercase">
+                          Maroquinerie d'excellence
+                        </span>
+                        <h2 className="text-2xl xs:text-3xl sm:text-3xl lg:text-4xl font-normal tracking-wide text-[#1C1C1C] font-serif uppercase leading-tight">
+                          {getCatalogTitle()}
+                        </h2>
+                        <p className="text-[11px] sm:text-xs text-[#9E9E9E] font-light max-w-md leading-relaxed">
+                          Each model is designed around absolute lines, featuring selected leather, raw beeswax edge finishes, and the iconic linen saddle-stitch.
+                        </p>
+                      </div>
+                      <div className="self-start sm:self-end shrink-0">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E8E0D4] text-[10px] font-semibold tracking-wider text-[#9E9E9E] uppercase">
+                          <span className="text-[#C9A96E] font-bold text-xs">{filteredProducts.length}</span>
+                          {filteredProducts.length === 1 ? 'Piece' : 'Pieces'}
+                        </span>
+                      </div>
                     </div>
+                    <div className="w-full h-px bg-gradient-to-r from-[#E8E0D4] via-[#C9A96E]/30 to-[#E8E0D4]" />
                   </div>
 
-                  {/* Divider */}
-                  <div className="w-full h-px bg-gradient-to-r from-[#E8E0D4] via-[#C9A96E]/30 to-[#E8E0D4]" />
-                </div>
-
-                {/* ── Filter Bar ── */}
-                <div className="mb-8 sm:mb-10">
-                  {/* Mobile: toggle button */}
-                  <div className="flex sm:hidden justify-between items-center mb-3">
-                    <button
-                      onClick={() => setFilterOpen(!filterOpen)}
-                      className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E8E0D4] text-[11px] font-semibold uppercase tracking-wider text-[#1C1C1C] active:bg-[#FAF7F2] transition-colors"
-                    >
-                      <SlidersHorizontal size={13} className="text-[#C9A96E]" />
-                      Filters & Sort
+                  {/* ── Filter Bar ── */}
+                  <div className="mb-8 sm:mb-10">
+                    {/* Mobile: toggle button */}
+                    <div className="flex sm:hidden justify-between items-center mb-3">
+                      <button
+                        onClick={() => setFilterOpen(!filterOpen)}
+                        className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E8E0D4] text-[11px] font-semibold uppercase tracking-wider text-[#1C1C1C] active:bg-[#FAF7F2] transition-colors"
+                      >
+                        <SlidersHorizontal size={13} className="text-[#C9A96E]" />
+                        Filters & Sort
+                        {(selectedMaterialFilter !== 'all' || selectedSort !== 'featured') && (
+                          <span className="w-2 h-2 rounded-full bg-[#C9A96E]" />
+                        )}
+                      </button>
                       {(selectedMaterialFilter !== 'all' || selectedSort !== 'featured') && (
-                        <span className="w-2 h-2 rounded-full bg-[#C9A96E]" />
-                      )}
-                    </button>
-                    {(selectedMaterialFilter !== 'all' || selectedSort !== 'featured') && (
-                      <button
-                        onClick={() => { setSelectedMaterialFilter('all'); setSelectedSort('featured'); }}
-                        className="text-[10px] text-[#C9A96E] font-medium tracking-wide hover:underline"
-                      >
-                        Clear all
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Mobile: expandable filter panel */}
-                  <AnimatePresence>
-                    {filterOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden sm:hidden mb-4"
-                      >
-                        <div className="bg-white border border-[#E8E0D4] p-4 space-y-4">
-                          <div className="space-y-2">
-                            <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">Material</label>
-                            <div className="grid grid-cols-2 gap-2">
-                              {[
-                                { val: 'all', label: 'All Hides' },
-                                { val: 'calfskin', label: 'Box Calfskin' },
-                                { val: 'goatskin', label: 'Chevre Goatskin' },
-                                { val: 'alligator', label: 'Alligator' },
-                              ].map((opt) => (
-                                <button
-                                  key={opt.val}
-                                  onClick={() => setSelectedMaterialFilter(opt.val)}
-                                  className={`px-3 py-2 text-[10px] font-semibold uppercase tracking-wide border transition-all ${
-                                    selectedMaterialFilter === opt.val
-                                      ? 'bg-[#1C1C1C] text-white border-[#1C1C1C]'
-                                      : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
-                                  }`}
-                                >
-                                  {opt.label}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">Sort by</label>
-                            <div className="grid grid-cols-1 gap-2">
-                              {[
-                                { val: 'featured', label: 'Featured / Bestsellers' },
-                                { val: 'price-low', label: 'Price: Low to High' },
-                                { val: 'price-high', label: 'Price: High to Low' },
-                              ].map((opt) => (
-                                <button
-                                  key={opt.val}
-                                  onClick={() => setSelectedSort(opt.val)}
-                                  className={`px-3 py-2 text-[10px] font-semibold uppercase tracking-wide border transition-all text-left ${
-                                    selectedSort === opt.val
-                                      ? 'bg-[#C9A96E] text-white border-[#C9A96E]'
-                                      : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
-                                  }`}
-                                >
-                                  {opt.label}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => setFilterOpen(false)}
-                            className="w-full py-2.5 bg-[#1C1C1C] text-white text-[10px] font-bold tracking-[0.2em] uppercase"
-                          >
-                            Apply Filters
-                          </button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Desktop: inline filter bar */}
-                  <div className="hidden sm:flex flex-wrap items-center gap-3">
-                    {/* Material pills */}
-                    <div className="flex items-center gap-1.5">
-                      <SlidersHorizontal size={12} className="text-[#C9A96E]" />
-                      <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider mr-1">Material:</span>
-                      {[
-                        { val: 'all', label: 'All Hides' },
-                        { val: 'calfskin', label: 'Box Calfskin' },
-                        { val: 'goatskin', label: 'Goatskin' },
-                        { val: 'alligator', label: 'Alligator' },
-                      ].map((opt) => (
                         <button
-                          key={opt.val}
-                          onClick={() => setSelectedMaterialFilter(opt.val)}
-                          className={`px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide border transition-all duration-200 ${
-                            selectedMaterialFilter === opt.val
-                              ? 'bg-[#1C1C1C] text-white border-[#1C1C1C]'
-                              : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E] hover:text-[#1C1C1C]'
-                          }`}
+                          onClick={() => { setSelectedMaterialFilter('all'); setSelectedSort('featured'); }}
+                          className="text-[10px] text-[#C9A96E] font-medium tracking-wide hover:underline"
                         >
-                          {opt.label}
+                          Clear all
                         </button>
-                      ))}
+                      )}
                     </div>
 
-                    {/* Divider */}
-                    <div className="h-6 w-px bg-[#E8E0D4]" />
-
-                    {/* Sort select */}
-                    <div className="flex items-center gap-2 bg-white border border-[#E8E0D4] px-3 py-1.5">
-                      <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider">Sort:</span>
-                      <select
-                        value={selectedSort}
-                        onChange={(e) => setSelectedSort(e.target.value)}
-                        className="bg-transparent focus:outline-none text-[10px] font-semibold text-[#1C1C1C] cursor-pointer uppercase tracking-wide"
-                      >
-                        <option value="featured">Featured</option>
-                        <option value="price-low">Price ↑</option>
-                        <option value="price-high">Price ↓</option>
-                      </select>
-                    </div>
-
-                    {/* Clear */}
-                    {(selectedMaterialFilter !== 'all' || selectedSort !== 'featured') && (
-                      <button
-                        onClick={() => { setSelectedMaterialFilter('all'); setSelectedSort('featured'); }}
-                        className="flex items-center gap-1 text-[10px] text-[#C9A96E] font-medium tracking-wide hover:underline"
-                      >
-                        <X size={10} />
-                        Clear
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* ── Product Grid ── */}
-                {filteredProducts.length === 0 ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.97 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-16 sm:py-24 bg-white border border-[#E8E0D4]"
-                  >
-                    <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center border border-[#E8E0D4] rounded-full bg-[#FAF7F2]">
-                      <SlidersHorizontal size={24} className="text-[#C9A96E]/60" strokeWidth={1.5} />
-                    </div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#1C1C1C] mb-2">
-                      No Matching Pieces
-                    </h4>
-                    <p className="text-[11px] text-[#9E9E9E] font-light max-w-xs mx-auto leading-relaxed mb-6">
-                      We currently do not have stock in this specific grain filter. Try another material or request a custom commission.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <button
-                        onClick={() => setSelectedMaterialFilter('all')}
-                        className="px-6 py-2.5 border border-[#1C1C1C] text-[#1C1C1C] hover:bg-[#1C1C1C] hover:text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300"
-                      >
-                        Clear Filters
-                      </button>
-                      <button
-                        onClick={() => handleTabChange('commissions')}
-                        className="px-6 py-2.5 bg-[#C9A96E] hover:bg-[#B8860B] text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300"
-                      >
-                        Request Commission
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 lg:gap-6">
-                      {filteredProducts.map((product, index) => (
+                    {/* Mobile: expandable filter panel */}
+                    <AnimatePresence>
+                      {filterOpen && (
                         <motion.div
-                          key={product.id}
-                          layout
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.45, delay: index * 0.05 }}
-                          className="h-full"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden sm:hidden mb-4"
                         >
-                          <ProductCard
-                            product={product}
-                            onViewDetail={handleOpenProductDetail}
-                            onToggleWishlist={handleToggleWishlist}
-                            isWishlisted={wishlist.includes(product.id)}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* ── Editorial Card ── */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.3 }}
-                      className="mt-4 sm:mt-6 relative overflow-hidden bg-[#EDE8DF] border border-[#E8E0D4] group"
-                    >
-                      {/* Decorative top accent */}
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
-
-                      <div className="flex flex-col sm:flex-row">
-                        {/* Text content */}
-                        <div className="flex-1 p-6 sm:p-8 lg:p-10 space-y-4 z-10 relative">
-                          <span className="inline-block text-[9px] tracking-[0.3em] text-[#B8860B] font-bold uppercase">
-                            Atelier Heritage
-                          </span>
-                          <h3 className="text-lg sm:text-xl lg:text-2xl font-normal text-[#1C1C1C] font-serif uppercase tracking-wide leading-tight max-w-sm">
-                            The Story of Natural Dyeing & Vegetable Tanning
-                          </h3>
-                          <p className="text-[11px] sm:text-xs text-[#6B6B6B] font-light leading-relaxed max-w-lg">
-                            Unique Tany leather dyes utilize vegetable bark, walnut husks, and oak tannin rather than harsh petroleum salts. This produces warm, rich, transparent color tones that do not cover the natural pores and scars of the calfskin hide, allowing each piece to absorb natural sunlight and breathe with age.
-                          </p>
-                          <button
-                            onClick={() => handleTabChange('atelier')}
-                            className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[#C9A96E] uppercase hover:gap-3 transition-all duration-300 group/btn mt-2"
-                          >
-                            <span>Explore the slow-dye method</span>
-                            <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
-                          </button>
-                        </div>
-
-                        {/* Decorative side panel (visible on sm+) */}
-                        <div className="hidden sm:flex items-center justify-center w-40 lg:w-56 relative border-l border-[#E8E0D4] bg-[#E8E0D4]/50 overflow-hidden">
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-32 h-32 lg:w-44 lg:h-44 rounded-full border border-[#C9A96E]/25 group-hover:scale-110 transition-transform duration-1000" />
-                            <div className="absolute w-20 h-20 lg:w-28 lg:h-28 rounded-full border border-[#C9A96E]/15" />
+                          <div className="bg-white border border-[#E8E0D4] p-4 space-y-4">
+                            <div className="space-y-2">
+                              <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">Material</label>
+                              <div className="grid grid-cols-2 gap-2">
+                                {[
+                                  { val: 'all', label: 'All Hides' },
+                                  { val: 'calfskin', label: 'Box Calfskin' },
+                                  { val: 'goatskin', label: 'Chevre Goatskin' },
+                                  { val: 'alligator', label: 'Alligator' },
+                                ].map((opt) => (
+                                  <button
+                                    key={opt.val}
+                                    onClick={() => setSelectedMaterialFilter(opt.val)}
+                                    className={`px-3 py-2 text-[10px] font-semibold uppercase tracking-wide border transition-all ${
+                                      selectedMaterialFilter === opt.val
+                                        ? 'bg-[#1C1C1C] text-white border-[#1C1C1C]'
+                                        : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
+                                    }`}
+                                  >
+                                    {opt.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">Sort by</label>
+                              <div className="grid grid-cols-1 gap-2">
+                                {[
+                                  { val: 'featured', label: 'Featured / Bestsellers' },
+                                  { val: 'price-low', label: 'Price: Low to High' },
+                                  { val: 'price-high', label: 'Price: High to Low' },
+                                ].map((opt) => (
+                                  <button
+                                    key={opt.val}
+                                    onClick={() => setSelectedSort(opt.val)}
+                                    className={`px-3 py-2 text-[10px] font-semibold uppercase tracking-wide border transition-all text-left ${
+                                      selectedSort === opt.val
+                                        ? 'bg-[#C9A96E] text-white border-[#C9A96E]'
+                                        : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
+                                    }`}
+                                  >
+                                    {opt.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => setFilterOpen(false)}
+                              className="w-full py-2.5 bg-[#1C1C1C] text-white text-[10px] font-bold tracking-[0.2em] uppercase"
+                            >
+                              Apply Filters
+                            </button>
                           </div>
-                          <span className="relative z-10 text-[9px] tracking-[0.4em] text-[#B8860B]/60 font-semibold uppercase rotate-90 whitespace-nowrap">
-                            Since 1891
-                          </span>
-                        </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Desktop: inline filter bar */}
+                    <div className="hidden sm:flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-1.5">
+                        <SlidersHorizontal size={12} className="text-[#C9A96E]" />
+                        <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider mr-1">Material:</span>
+                        {[
+                          { val: 'all', label: 'All Hides' },
+                          { val: 'calfskin', label: 'Box Calfskin' },
+                          { val: 'goatskin', label: 'Goatskin' },
+                          { val: 'alligator', label: 'Alligator' },
+                        ].map((opt) => (
+                          <button
+                            key={opt.val}
+                            onClick={() => setSelectedMaterialFilter(opt.val)}
+                            className={`px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide border transition-all duration-200 ${
+                              selectedMaterialFilter === opt.val
+                                ? 'bg-[#1C1C1C] text-white border-[#1C1C1C]'
+                                : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E] hover:text-[#1C1C1C]'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="h-6 w-px bg-[#E8E0D4]" />
+                      <div className="flex items-center gap-2 bg-white border border-[#E8E0D4] px-3 py-1.5">
+                        <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider">Sort:</span>
+                        <select
+                          value={selectedSort}
+                          onChange={(e) => setSelectedSort(e.target.value)}
+                          className="bg-transparent focus:outline-none text-[10px] font-semibold text-[#1C1C1C] cursor-pointer uppercase tracking-wide"
+                        >
+                          <option value="featured">Featured</option>
+                          <option value="price-low">Price ↑</option>
+                          <option value="price-high">Price ↓</option>
+                        </select>
+                      </div>
+                      {(selectedMaterialFilter !== 'all' || selectedSort !== 'featured') && (
+                        <button
+                          onClick={() => { setSelectedMaterialFilter('all'); setSelectedSort('featured'); }}
+                          className="flex items-center gap-1 text-[10px] text-[#C9A96E] font-medium tracking-wide hover:underline"
+                        >
+                          <X size={10} />
+                          Clear
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ── Product Grid ── */}
+                  {filteredProducts.length === 0 ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="text-center py-16 sm:py-24 bg-white border border-[#E8E0D4]"
+                    >
+                      <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center border border-[#E8E0D4] rounded-full bg-[#FAF7F2]">
+                        <SlidersHorizontal size={24} className="text-[#C9A96E]/60" strokeWidth={1.5} />
+                      </div>
+                      <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#1C1C1C] mb-2">
+                        No Matching Pieces
+                      </h4>
+                      <p className="text-[11px] text-[#9E9E9E] font-light max-w-xs mx-auto leading-relaxed mb-6">
+                        We currently do not have stock in this specific grain filter. Try another material or request a custom commission.
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button
+                          onClick={() => setSelectedMaterialFilter('all')}
+                          className="px-6 py-2.5 border border-[#1C1C1C] text-[#1C1C1C] hover:bg-[#1C1C1C] hover:text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300"
+                        >
+                          Clear Filters
+                        </button>
+                        <button
+                          onClick={() => handleTabChange('commissions')}
+                          className="px-6 py-2.5 bg-[#C9A96E] hover:bg-[#B8860B] text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300"
+                        >
+                          Request Commission
+                        </button>
                       </div>
                     </motion.div>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 lg:gap-6">
+                        {filteredProducts.map((product, index) => (
+                          <motion.div
+                            key={product.id}
+                            layout
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.45, delay: index * 0.05 }}
+                            className="h-full"
+                          >
+                            <ProductCard
+                              product={product}
+                              onViewDetail={handleOpenProductDetail}
+                              onToggleWishlist={handleToggleWishlist}
+                              isWishlisted={wishlist.includes(product.id)}
+                            />
+                          </motion.div>
+                        ))}
+                      </div>
 
-                {/* ── Bottom CTA strip ── */}
-                <div className="mt-10 sm:mt-14 pt-8 sm:pt-10 border-t border-[#E8E0D4]">
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-8">
-                    <div className="text-center sm:text-left space-y-1">
-                      <p className="text-[10px] tracking-[0.25em] text-[#9E9E9E] uppercase font-semibold">
-                        Need something unique?
-                      </p>
-                      <p className="text-sm sm:text-base font-serif text-[#1C1C1C] uppercase tracking-wide">
-                        Commission a bespoke piece
-                      </p>
-                    </div>
-                    <div className="flex flex-col xs:flex-row gap-3 w-full sm:w-auto">
-                      <button
-                        onClick={() => handleTabChange('commissions')}
-                        className="px-6 sm:px-8 py-3 bg-[#1C1C1C] hover:bg-[#333] text-white text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300 flex items-center justify-center gap-2 group/cta"
+                      {/* ── Editorial Card ── */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="mt-4 sm:mt-6 relative overflow-hidden bg-[#EDE8DF] border border-[#E8E0D4] group"
                       >
-                        <span>Begin Commission</span>
-                        <ArrowRight size={12} className="group-hover/cta:translate-x-1 transition-transform duration-300" />
-                      </button>
-                      <button
-                        onClick={() => handleTabChange('atelier')}
-                        className="px-6 sm:px-8 py-3 border border-[#E8E0D4] hover:border-[#C9A96E] bg-white text-[#1C1C1C] text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300"
-                      >
-                        Visit Atelier
-                      </button>
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
+                        <div className="flex flex-col sm:flex-row">
+                          <div className="flex-1 p-6 sm:p-8 lg:p-10 space-y-4 z-10 relative">
+                            <span className="inline-block text-[9px] tracking-[0.3em] text-[#B8860B] font-bold uppercase">
+                              Atelier Heritage
+                            </span>
+                            <h3 className="text-lg sm:text-xl lg:text-2xl font-normal text-[#1C1C1C] font-serif uppercase tracking-wide leading-tight max-w-sm">
+                              The Story of Natural Dyeing & Vegetable Tanning
+                            </h3>
+                            <p className="text-[11px] sm:text-xs text-[#6B6B6B] font-light leading-relaxed max-w-lg">
+                              Unique Tany leather dyes utilize vegetable bark, walnut husks, and oak tannin rather than harsh petroleum salts. This produces warm, rich, transparent color tones that do not cover the natural pores and scars of the calfskin hide, allowing each piece to absorb natural sunlight and breathe with age.
+                            </p>
+                            <button
+                              onClick={() => handleTabChange('atelier')}
+                              className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[#C9A96E] uppercase hover:gap-3 transition-all duration-300 group/btn mt-2"
+                            >
+                              <span>Explore the slow-dye method</span>
+                              <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
+                            </button>
+                          </div>
+                          <div className="hidden sm:flex items-center justify-center w-40 lg:w-56 relative border-l border-[#E8E0D4] overflow-hidden">
+                            {/*
+                             * ── Editorial panel: use the background image here too ──
+                             * Shows a cropped, slightly more opaque portion of the
+                             * brand image as a decorative right-panel accent.
+                             */}
+                            <img
+                              src={BG_IMAGE}
+                              alt=""
+                              aria-hidden="true"
+                              draggable={false}
+                              className="absolute inset-0 w-full h-full object-cover mix-blend-multiply pointer-events-none"
+                              style={{ opacity: 0.18 }}
+                            />
+                            <div className="absolute inset-0 bg-[#E8E0D4]/60" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-32 h-32 lg:w-44 lg:h-44 rounded-full border border-[#C9A96E]/25 group-hover:scale-110 transition-transform duration-1000" />
+                              <div className="absolute w-20 h-20 lg:w-28 lg:h-28 rounded-full border border-[#C9A96E]/15" />
+                            </div>
+                            <span className="relative z-10 text-[9px] tracking-[0.4em] text-[#B8860B]/60 font-semibold uppercase rotate-90 whitespace-nowrap">
+                              Since 1891
+                            </span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+
+                  {/* ── Bottom CTA strip ── */}
+                  <div className="mt-10 sm:mt-14 pt-8 sm:pt-10 border-t border-[#E8E0D4]">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-8">
+                      <div className="text-center sm:text-left space-y-1">
+                        <p className="text-[10px] tracking-[0.25em] text-[#9E9E9E] uppercase font-semibold">
+                          Need something unique?
+                        </p>
+                        <p className="text-sm sm:text-base font-serif text-[#1C1C1C] uppercase tracking-wide">
+                          Commission a bespoke piece
+                        </p>
+                      </div>
+                      <div className="flex flex-col xs:flex-row gap-3 w-full sm:w-auto">
+                        <button
+                          onClick={() => handleTabChange('commissions')}
+                          className="px-6 sm:px-8 py-3 bg-[#1C1C1C] hover:bg-[#333] text-white text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300 flex items-center justify-center gap-2 group/cta"
+                        >
+                          <span>Begin Commission</span>
+                          <ArrowRight size={12} className="group-hover/cta:translate-x-1 transition-transform duration-300" />
+                        </button>
+                        <button
+                          onClick={() => handleTabChange('atelier')}
+                          className="px-6 sm:px-8 py-3 border border-[#E8E0D4] hover:border-[#C9A96E] bg-white text-[#1C1C1C] text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300"
+                        >
+                          Visit Atelier
+                        </button>
+                      </div>
                     </div>
                   </div>
+
                 </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
 
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
+        {/* ── Footer ── */}
+        <Footer onNavClick={(tab) => {
+          setActiveTab(tab);
+          setTimeout(() => scrollToSection('main-focus'), 100);
+        }} />
 
-      {/* ── Footer ── */}
-      <Footer onNavClick={(tab) => {
-        setActiveTab(tab);
-        setTimeout(() => scrollToSection('main-focus'), 100);
-      }} />
+      </div>{/* /z-10 content wrapper */}
 
       {/* ── Product Detail Drawer ── */}
       <AnimatePresence>
@@ -678,9 +718,7 @@ export default function App() {
                     Continue Shopping
                   </button>
                   <button
-                    onClick={() => {
-                      setWishlist([]);
-                    }}
+                    onClick={() => setWishlist([])}
                     className="w-full py-2 text-[9px] font-medium text-[#9E9E9E] hover:text-red-500 uppercase tracking-wider transition-colors"
                   >
                     Clear All Favorites

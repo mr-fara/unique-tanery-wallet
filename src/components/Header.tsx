@@ -169,7 +169,7 @@ export default function Header({
 
           {/* Center: Brand Logo */}
           <motion.button
-            className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center text-center select-none z-0"
+            className="absolute lg:left-1/2 left-38 -translate-x-1/2 flex flex-col items-center text-center select-none z-0"
             onClick={() => handleNavClick('all')}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
@@ -184,15 +184,6 @@ export default function Header({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              <span className="hidden md:block text-[8px] lg:text-[9px] tracking-[0.35em] text-amber-700/70 font-medium uppercase">
-                Maroquinerie de Luxe • Fait Main
-              </span>
-              <span className="hidden sm:block md:hidden text-[7px] tracking-[0.3em] text-amber-700/70 font-medium uppercase">
-                Luxe Leather • Fait Main
-              </span>
-              <span className="block sm:hidden text-[7px] tracking-[0.25em] text-amber-700/70 font-medium uppercase">
-                Fait Main
-              </span>
             </motion.span>
           </motion.button>
 
