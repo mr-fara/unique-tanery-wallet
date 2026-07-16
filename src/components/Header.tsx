@@ -11,6 +11,10 @@ interface HeaderProps {
   wishlistCount: number;
 }
 
+// ── Logo path (served from /public/image/) ────────────────────────────────────
+const LOGO = '/image/lg.jpg';
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function Header({
   activeTab,
   setActiveTab,
@@ -25,14 +29,12 @@ export default function Header({
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Track scroll for shadow effect
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -44,14 +46,12 @@ export default function Header({
     };
   }, [mobileMenuOpen]);
 
-  // Auto-focus search input
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [searchOpen]);
 
-  // Close search on Escape
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -93,15 +93,12 @@ export default function Header({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
-          {/* Small mobile banner */}
           <p className="block sm:hidden text-[8px] tracking-[0.2em] uppercase font-light">
             Pure Leather Craft • Free Shipping over $500
           </p>
-          {/* Medium+ banner */}
           <p className="hidden sm:block md:hidden text-[9px] tracking-[0.18em] uppercase font-light">
             Saddle Stitching & Pure Leather • Complimentary Wrapping • Worldwide Shipping
           </p>
-          {/* Large banner */}
           <p className="hidden md:block text-[10px] tracking-[0.2em] uppercase font-light">
             Saddle Stitching & Pure Leather Craft • Complimentary Bespoke Wrapping • Shipping Worldwide
           </p>
@@ -112,7 +109,7 @@ export default function Header({
       <div className="relative max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16 md:h-20 lg:h-[72px]">
 
-          {/* Left: Mobile menu + desktop links */}
+          {/* ── Left: Mobile hamburger + desktop links ── */}
           <div className="flex items-center gap-1 min-w-0 flex-shrink-0 z-10">
             {/* Mobile hamburger */}
             <motion.button
@@ -167,27 +164,76 @@ export default function Header({
             </div>
           </div>
 
-          {/* Center: Brand Logo */}
+          {/* ── Center: Logo Image + Brand Name ── */}
           <motion.button
-            className="absolute lg:left-1/2 left-38 -translate-x-1/2 flex flex-col items-center text-center select-none z-0"
+            className="absolute left-38 lg:left-1/2 -translate-x-1/2 flex flex-col items-center text-center select-none z-0"
             onClick={() => handleNavClick('all')}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
           >
-            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-light tracking-[0.22em] sm:tracking-[0.28em] md:tracking-[0.32em] text-neutral-800 font-serif leading-none whitespace-nowrap">
-              UNIQUE TANERY
-            </h1>
-            <motion.span
-              className="mt-0.5 sm:mt-1"
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-            </motion.span>
+            <div className="flex items-center gap-2 sm:gap-3">
+
+              {/* ── Logo Image ── */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className={`
+                  relative overflow-hidden rounded-full shrink-0
+                  border-2 border-[#C9A96E]/40
+                  shadow-sm
+                  w-8 h-8
+                  sm:w-10 sm:h-10
+                  md:w-11 md:h-11
+                  lg:w-12 lg:h-12
+                `}
+              >
+                <img
+                  src={LOGO}
+                  alt="Unique Tanery logo"
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+                {/* Subtle gold ring shimmer overlay */}
+                <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-[#C9A96E]/20 pointer-events-none" />
+              </motion.div>
+
+              {/* ── Brand Text ── */}
+              <div className="flex flex-col items-start">
+                <motion.h1
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="
+                    text-sm sm:text-base md:text-lg lg:text-xl
+                    font-light
+                    tracking-[0.22em] sm:tracking-[0.28em] md:tracking-[0.32em]
+                    text-neutral-800 font-serif
+                    leading-none whitespace-nowrap
+                  "
+                >
+                  UNIQUE TANERY
+                </motion.h1>
+                <motion.span
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.45 }}
+                  className="
+                    mt-0.5 sm:mt-1
+                    text-[7px] sm:text-[8px]
+                    tracking-[0.3em] sm:tracking-[0.38em]
+                    text-[#C9A96E] font-medium uppercase
+                    whitespace-nowrap
+                  "
+                >
+                  Maroquinerie d'excellence
+                </motion.span>
+              </div>
+            </div>
           </motion.button>
 
-          {/* Right: Action icons */}
+          {/* ── Right: Action icons ── */}
           <div className="flex items-center gap-0.5 sm:gap-1 md:gap-1.5 flex-shrink-0 z-10">
             {/* Search */}
             <motion.button
@@ -406,7 +452,7 @@ export default function Header({
                 {/* Divider */}
                 <div className="mx-5 sm:mx-7 border-t border-neutral-100" />
 
-                {/* Secondary links */}
+                {/* Secondary links + brand footer */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -429,12 +475,23 @@ export default function Header({
                     </button>
                   </div>
 
-                  {/* Brand footer */}
-                  <div className="text-center pt-2 sm:pt-3 border-t border-neutral-50">
-                    <p className="text-[8px] sm:text-[9px] text-neutral-400 uppercase tracking-[0.3em]">
-                      Unique Tany
-                    </p>
-                    <p className="text-[7px] sm:text-[8px] text-neutral-300 tracking-[0.2em] mt-0.5">
+                  {/* ── Mobile menu brand footer with logo ── */}
+                  <div className="text-center pt-3 sm:pt-4 border-t border-neutral-100">
+                    <div className="flex items-center justify-center gap-2.5 mb-1.5">
+                      {/* Logo thumbnail in mobile footer */}
+                      <div className="w-7 h-7 rounded-full overflow-hidden border border-[#C9A96E]/40 shadow-sm shrink-0">
+                        <img
+                          src={LOGO}
+                          alt="Unique Tanery"
+                          className="w-full h-full object-cover"
+                          draggable={false}
+                        />
+                      </div>
+                      <p className="text-[9px] sm:text-[10px] text-neutral-500 uppercase tracking-[0.3em] font-serif">
+                        Unique Tanery
+                      </p>
+                    </div>
+                    <p className="text-[7px] sm:text-[8px] text-neutral-300 tracking-[0.2em]">
                       Handcrafted with devotion
                     </p>
                   </div>
