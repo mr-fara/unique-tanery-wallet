@@ -181,8 +181,6 @@ export default function Header({
                 transition={{ duration: 0.5, ease: 'easeOut' }}
                 className={`
                   relative overflow-hidden rounded-full shrink-0
-                  border-2 border-[#C9A96E]/40
-                  shadow-sm
                   w-8 h-8
                   sm:w-10 sm:h-10
                   md:w-11 md:h-11
@@ -196,7 +194,7 @@ export default function Header({
                   draggable={false}
                 />
                 {/* Subtle gold ring shimmer overlay */}
-                <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-[#C9A96E]/20 pointer-events-none" />
+                <div className="absolute inset-0   pointer-events-none" />
               </motion.div>
 
               {/* ── Brand Text ── */}
@@ -227,7 +225,7 @@ export default function Header({
                     whitespace-nowrap
                   "
                 >
-                  Maroquinerie d'excellence
+                  Embrace the Class
                 </motion.span>
               </div>
             </div>
