@@ -123,15 +123,6 @@ export default function App() {
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1C1C1C] selection:bg-[#C9A96E] selection:text-white flex flex-col">
 
       {/* ── Full-Page Background Image ───────────────────────────────────────── */}
-      {/*
-       *  • fixed   → stays in place during scroll
-       *  • inset-0 → covers the full viewport
-       *  • object-cover → fills without distortion
-       *  • opacity-[0.10] → subtle luxury feel, cream page color still dominant
-       *  • mix-blend-multiply → warm integration with #FAF7F2 base
-       *  • pointer-events-none → invisible to interaction
-       *  • z-0 → behind all content
-       */}
       <div
         aria-hidden="true"
         className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
@@ -145,8 +136,7 @@ export default function App() {
         />
       </div>
 
-      {/* ── Gold vignette edges ────────────────────────────────────────────────
-           Inward warm shadow to frame the viewport — classic luxury-print look. */}
+      {/* ── Gold vignette edges ── */}
       <div
         aria-hidden="true"
         className="fixed inset-0 z-0 pointer-events-none"
@@ -485,11 +475,6 @@ export default function App() {
                             </button>
                           </div>
                           <div className="hidden sm:flex items-center justify-center w-40 lg:w-56 relative border-l border-[#E8E0D4] overflow-hidden">
-                            {/*
-                             * ── Editorial panel: use the background image here too ──
-                             * Shows a cropped, slightly more opaque portion of the
-                             * brand image as a decorative right-panel accent.
-                             */}
                             <img
                               src={BG_IMAGE}
                               alt=""
@@ -547,11 +532,27 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        {/* ── Footer ── */}
-        <Footer onNavClick={(tab) => {
-          setActiveTab(tab);
-          setTimeout(() => scrollToSection('main-focus'), 100);
-        }} />
+        {/* ═══════════════════════════════════════════════════════════ */}
+        {/* ── Footer (ONLY shown on 'all' collection page) ────────── */}
+        {/* ═══════════════════════════════════════════════════════════ */}
+        <AnimatePresence mode="wait">
+          {activeTab === 'all' && (
+            <motion.div
+              key="footer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <Footer
+                onNavClick={(tab) => {
+                  setActiveTab(tab);
+                  setTimeout(() => scrollToSection('main-focus'), 100);
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>{/* /z-10 content wrapper */}
 
