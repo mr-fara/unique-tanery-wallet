@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import ProductCard from './components/ProductCard';
 import ProductDetailDrawer from './components/ProductDetailDrawer';
 import AtelierSection from './components/AtelierSection';
+import TestimonialSection from './components/Testimonials';
 import CartDrawer from './components/CartDrawer';
 import CustomCommission from './components/CustomCommission';
 import Footer from './components/Footer';
@@ -12,16 +13,13 @@ import { Product, ProductColor, CustomizationOptions, CartItem } from './types';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, SlidersHorizontal, ArrowRight, X } from 'lucide-react';
 
-// ─── Background Image ─────────────────────────────────────────────────────────
-const BG_IMAGE = '/image/98178753247.png';
-// ─────────────────────────────────────────────────────────────────────────────
-
 export default function App() {
   const [activeTab, setActiveTab] = useState('all');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [initialColorForDetail, setInitialColorForDetail] = useState<ProductColor | null>(null);
+  const [initialColorForDetail, setInitialColorForDetail] =
+    useState<ProductColor | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const [selectedMaterialFilter, setSelectedMaterialFilter] = useState('all');
@@ -36,7 +34,10 @@ export default function App() {
     );
   };
 
-  const handleOpenProductDetail = (product: Product, initialColor: ProductColor) => {
+  const handleOpenProductDetail = (
+    product: Product,
+    initialColor: ProductColor
+  ) => {
     setSelectedProduct(product);
     setInitialColorForDetail(initialColor);
   };
@@ -48,7 +49,9 @@ export default function App() {
   ) => {
     const cartItemId = `${product.id}-${selectedColor.name}-${customization.stitching}-${customization.hardware || ''}-${customization.monogramText || ''}-${customization.foilColor}`;
     setCart((prevCart) => {
-      const existingItemIdx = prevCart.findIndex((item) => item.cartItemId === cartItemId);
+      const existingItemIdx = prevCart.findIndex(
+        (item) => item.cartItemId === cartItemId
+      );
       if (existingItemIdx > -1) {
         const updated = [...prevCart];
         updated[existingItemIdx].quantity += 1;
@@ -76,20 +79,32 @@ export default function App() {
   };
 
   const handleRemoveItem = (cartItemId: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.cartItemId !== cartItemId));
+    setCart((prevCart) =>
+      prevCart.filter((item) => item.cartItemId !== cartItemId)
+    );
   };
 
   const handleClearCart = () => setCart([]);
 
   const filteredProducts = PRODUCTS.filter((product) => {
-    const categoryMatch = activeTab === 'all' || product.category === activeTab;
+    const categoryMatch =
+      activeTab === 'all' || product.category === activeTab;
     if (selectedMaterialFilter === 'all') return categoryMatch;
     if (selectedMaterialFilter === 'calfskin')
-      return categoryMatch && product.leatherType.toLowerCase().includes('calfskin');
+      return (
+        categoryMatch &&
+        product.leatherType.toLowerCase().includes('calfskin')
+      );
     if (selectedMaterialFilter === 'alligator')
-      return categoryMatch && product.leatherType.toLowerCase().includes('alligator');
+      return (
+        categoryMatch &&
+        product.leatherType.toLowerCase().includes('alligator')
+      );
     if (selectedMaterialFilter === 'goatskin')
-      return categoryMatch && product.leatherType.toLowerCase().includes('goatskin');
+      return (
+        categoryMatch &&
+        product.leatherType.toLowerCase().includes('goatskin')
+      );
     return categoryMatch;
   }).sort((a, b) => {
     if (selectedSort === 'price-low') return a.price - b.price;
@@ -101,11 +116,16 @@ export default function App() {
 
   const getCatalogTitle = () => {
     switch (activeTab) {
-      case 'bags': return "Women's Fine Bags";
-      case 'wallets': return 'Seamless Wallets';
-      case 'watch-straps': return 'Watch Straps';
-      case 'gifts': return 'Premium Gifts';
-      default: return 'The Craft Collection';
+      case 'bags':
+        return "Women's Fine Bags";
+      case 'wallets':
+        return 'Seamless Wallets';
+      case 'watch-straps':
+        return 'Watch Straps';
+      case 'gifts':
+        return 'Premium Gifts';
+      default:
+        return 'The Craft Collection';
     }
   };
 
@@ -120,33 +140,73 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#FAF7F2] text-[#1C1C1C] selection:bg-[#C9A96E] selection:text-white flex flex-col">
+    <div className="relative min-h-screen text-[#1C1C1C] selection:bg-[#C9A96E] selection:text-white flex flex-col">
 
-      {/* ── Full-Page Background Image ───────────────────────────────────────── */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
-      >
-        <img
-          src={BG_IMAGE}
-          alt=""
-          className="w-full h-full object-cover mix-blend-multiply"
-          style={{ opacity: 0.10 }}
-          draggable={false}
-        />
-      </div>
-
-      {/* ── Gold vignette edges ── */}
+      {/* ── Background Images: mobile (bg5) & desktop (bg6) ── */}
       <div
         aria-hidden="true"
         className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse at center, transparent 55%, rgba(180,140,80,0.09) 100%)',
-        }}
-      />
+      >
+        {/* Mobile background: bg5.png (shown below md) */}
+        <div
+          className="absolute inset-0 block md:hidden"
+          style={{
+            backgroundImage: 'url(/image/bg5.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll',
+          }}
+        />
+        {/* Desktop background: bg6.png (shown at md and above) */}
+        <div
+          className="absolute inset-0 hidden md:block"
+          style={{
+            backgroundImage: 'url(/image/bg6.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'fixed',
+          }}
+        />
 
-      {/* ── All page content sits above the background (z-10+) ───────────────── */}
+        {/* ── Warm cream tint overlay (tones image to match brand palette) ── */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'rgba(250, 247, 242, 0.82)',
+          }}
+        />
+
+        {/* ── Subtle noise/texture feel via gradient layers ── */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(250,247,242,0.55) 0%, rgba(250,247,242,0.10) 30%, rgba(250,247,242,0.10) 70%, rgba(250,247,242,0.75) 100%)',
+          }}
+        />
+
+        {/* ── Gold vignette edges ── */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, transparent 50%, rgba(180,140,80,0.13) 100%)',
+          }}
+        />
+
+        {/* ── Subtle top gold bar accent ── */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[2px]"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, rgba(201,169,110,0.6) 40%, rgba(201,169,110,0.6) 60%, transparent)',
+          }}
+        />
+      </div>
+
+      {/* ── All page content ── */}
       <div className="relative z-10 flex flex-col min-h-screen">
 
         {/* ── Header ── */}
@@ -241,12 +301,16 @@ export default function App() {
                           {getCatalogTitle()}
                         </h2>
                         <p className="text-[11px] sm:text-xs text-[#9E9E9E] font-light max-w-md leading-relaxed">
-                          Each model is designed around absolute lines, featuring selected leather, raw beeswax edge finishes, and the iconic linen saddle-stitch.
+                          Each model is designed around absolute lines, featuring
+                          selected leather, raw beeswax edge finishes, and the
+                          iconic linen saddle-stitch.
                         </p>
                       </div>
                       <div className="self-start sm:self-end shrink-0">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E8E0D4] text-[10px] font-semibold tracking-wider text-[#9E9E9E] uppercase">
-                          <span className="text-[#C9A96E] font-bold text-xs">{filteredProducts.length}</span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/80 backdrop-blur-sm border border-[#E8E0D4] text-[10px] font-semibold tracking-wider text-[#9E9E9E] uppercase">
+                          <span className="text-[#C9A96E] font-bold text-xs">
+                            {filteredProducts.length}
+                          </span>
                           {filteredProducts.length === 1 ? 'Piece' : 'Pieces'}
                         </span>
                       </div>
@@ -260,7 +324,7 @@ export default function App() {
                     <div className="flex sm:hidden justify-between items-center mb-3">
                       <button
                         onClick={() => setFilterOpen(!filterOpen)}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E8E0D4] text-[11px] font-semibold uppercase tracking-wider text-[#1C1C1C] active:bg-[#FAF7F2] transition-colors"
+                        className="flex items-center gap-2 px-4 py-2.5 bg-white/80 backdrop-blur-sm border border-[#E8E0D4] text-[11px] font-semibold uppercase tracking-wider text-[#1C1C1C] active:bg-[#FAF7F2] transition-colors"
                       >
                         <SlidersHorizontal size={13} className="text-[#C9A96E]" />
                         Filters & Sort
@@ -270,7 +334,10 @@ export default function App() {
                       </button>
                       {(selectedMaterialFilter !== 'all' || selectedSort !== 'featured') && (
                         <button
-                          onClick={() => { setSelectedMaterialFilter('all'); setSelectedSort('featured'); }}
+                          onClick={() => {
+                            setSelectedMaterialFilter('all');
+                            setSelectedSort('featured');
+                          }}
                           className="text-[10px] text-[#C9A96E] font-medium tracking-wide hover:underline"
                         >
                           Clear all
@@ -288,9 +355,11 @@ export default function App() {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden sm:hidden mb-4"
                         >
-                          <div className="bg-white border border-[#E8E0D4] p-4 space-y-4">
+                          <div className="bg-white/90 backdrop-blur-sm border border-[#E8E0D4] p-4 space-y-4">
                             <div className="space-y-2">
-                              <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">Material</label>
+                              <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">
+                                Material
+                              </label>
                               <div className="grid grid-cols-2 gap-2">
                                 {[
                                   { val: 'all', label: 'All Hides' },
@@ -304,7 +373,7 @@ export default function App() {
                                     className={`px-3 py-2 text-[10px] font-semibold uppercase tracking-wide border transition-all ${
                                       selectedMaterialFilter === opt.val
                                         ? 'bg-[#1C1C1C] text-white border-[#1C1C1C]'
-                                        : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
+                                        : 'bg-white/70 text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
                                     }`}
                                   >
                                     {opt.label}
@@ -313,7 +382,9 @@ export default function App() {
                               </div>
                             </div>
                             <div className="space-y-2">
-                              <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">Sort by</label>
+                              <label className="text-[9px] tracking-[0.2em] font-semibold text-[#9E9E9E] uppercase">
+                                Sort by
+                              </label>
                               <div className="grid grid-cols-1 gap-2">
                                 {[
                                   { val: 'featured', label: 'Featured / Bestsellers' },
@@ -326,7 +397,7 @@ export default function App() {
                                     className={`px-3 py-2 text-[10px] font-semibold uppercase tracking-wide border transition-all text-left ${
                                       selectedSort === opt.val
                                         ? 'bg-[#C9A96E] text-white border-[#C9A96E]'
-                                        : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
+                                        : 'bg-white/70 text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E]'
                                     }`}
                                   >
                                     {opt.label}
@@ -349,7 +420,9 @@ export default function App() {
                     <div className="hidden sm:flex flex-wrap items-center gap-3">
                       <div className="flex items-center gap-1.5">
                         <SlidersHorizontal size={12} className="text-[#C9A96E]" />
-                        <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider mr-1">Material:</span>
+                        <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider mr-1">
+                          Material:
+                        </span>
                         {[
                           { val: 'all', label: 'All Hides' },
                           { val: 'calfskin', label: 'Box Calfskin' },
@@ -362,7 +435,7 @@ export default function App() {
                             className={`px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide border transition-all duration-200 ${
                               selectedMaterialFilter === opt.val
                                 ? 'bg-[#1C1C1C] text-white border-[#1C1C1C]'
-                                : 'bg-white text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E] hover:text-[#1C1C1C]'
+                                : 'bg-white/80 backdrop-blur-sm text-[#6B6B6B] border-[#E8E0D4] hover:border-[#C9A96E] hover:text-[#1C1C1C]'
                             }`}
                           >
                             {opt.label}
@@ -370,8 +443,10 @@ export default function App() {
                         ))}
                       </div>
                       <div className="h-6 w-px bg-[#E8E0D4]" />
-                      <div className="flex items-center gap-2 bg-white border border-[#E8E0D4] px-3 py-1.5">
-                        <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider">Sort:</span>
+                      <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-[#E8E0D4] px-3 py-1.5">
+                        <span className="text-[10px] font-semibold text-[#9E9E9E] uppercase tracking-wider">
+                          Sort:
+                        </span>
                         <select
                           value={selectedSort}
                           onChange={(e) => setSelectedSort(e.target.value)}
@@ -384,7 +459,10 @@ export default function App() {
                       </div>
                       {(selectedMaterialFilter !== 'all' || selectedSort !== 'featured') && (
                         <button
-                          onClick={() => { setSelectedMaterialFilter('all'); setSelectedSort('featured'); }}
+                          onClick={() => {
+                            setSelectedMaterialFilter('all');
+                            setSelectedSort('featured');
+                          }}
                           className="flex items-center gap-1 text-[10px] text-[#C9A96E] font-medium tracking-wide hover:underline"
                         >
                           <X size={10} />
@@ -399,7 +477,7 @@ export default function App() {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.97 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="text-center py-16 sm:py-24 bg-white border border-[#E8E0D4]"
+                      className="text-center py-16 sm:py-24 bg-white/80 backdrop-blur-sm border border-[#E8E0D4]"
                     >
                       <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center border border-[#E8E0D4] rounded-full bg-[#FAF7F2]">
                         <SlidersHorizontal size={24} className="text-[#C9A96E]/60" strokeWidth={1.5} />
@@ -408,7 +486,8 @@ export default function App() {
                         No Matching Pieces
                       </h4>
                       <p className="text-[11px] text-[#9E9E9E] font-light max-w-xs mx-auto leading-relaxed mb-6">
-                        We currently do not have stock in this specific grain filter. Try another material or request a custom commission.
+                        We currently do not have stock in this specific grain filter.
+                        Try another material or request a custom commission.
                       </p>
                       <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <button
@@ -452,7 +531,7 @@ export default function App() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
-                        className="mt-4 sm:mt-6 relative overflow-hidden bg-[#EDE8DF] border border-[#E8E0D4] group"
+                        className="mt-4 sm:mt-6 relative overflow-hidden bg-[#EDE8DF]/90 backdrop-blur-sm border border-[#E8E0D4] group"
                       >
                         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
                         <div className="flex flex-col sm:flex-row">
@@ -464,25 +543,25 @@ export default function App() {
                               The Story of Natural Dyeing & Vegetable Tanning
                             </h3>
                             <p className="text-[11px] sm:text-xs text-[#6B6B6B] font-light leading-relaxed max-w-lg">
-                              Unique Tany leather dyes utilize vegetable bark, walnut husks, and oak tannin rather than harsh petroleum salts. This produces warm, rich, transparent color tones that do not cover the natural pores and scars of the calfskin hide, allowing each piece to absorb natural sunlight and breathe with age.
+                              Unique Tany leather dyes utilize vegetable bark, walnut
+                              husks, and oak tannin rather than harsh petroleum salts.
+                              This produces warm, rich, transparent color tones that do
+                              not cover the natural pores and scars of the calfskin hide,
+                              allowing each piece to absorb natural sunlight and breathe
+                              with age.
                             </p>
                             <button
                               onClick={() => handleTabChange('atelier')}
                               className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[#C9A96E] uppercase hover:gap-3 transition-all duration-300 group/btn mt-2"
                             >
                               <span>Explore the slow-dye method</span>
-                              <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform duration-300" />
+                              <ArrowRight
+                                size={12}
+                                className="group-hover/btn:translate-x-1 transition-transform duration-300"
+                              />
                             </button>
                           </div>
                           <div className="hidden sm:flex items-center justify-center w-40 lg:w-56 relative border-l border-[#E8E0D4] overflow-hidden">
-                            <img
-                              src={BG_IMAGE}
-                              alt=""
-                              aria-hidden="true"
-                              draggable={false}
-                              className="absolute inset-0 w-full h-full object-cover mix-blend-multiply pointer-events-none"
-                              style={{ opacity: 0.18 }}
-                            />
                             <div className="absolute inset-0 bg-[#E8E0D4]/60" />
                             <div className="absolute inset-0 flex items-center justify-center">
                               <div className="w-32 h-32 lg:w-44 lg:h-44 rounded-full border border-[#C9A96E]/25 group-hover:scale-110 transition-transform duration-1000" />
@@ -514,27 +593,42 @@ export default function App() {
                           className="px-6 sm:px-8 py-3 bg-[#1C1C1C] hover:bg-[#333] text-white text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300 flex items-center justify-center gap-2 group/cta"
                         >
                           <span>Begin Commission</span>
-                          <ArrowRight size={12} className="group-hover/cta:translate-x-1 transition-transform duration-300" />
+                          <ArrowRight
+                            size={12}
+                            className="group-hover/cta:translate-x-1 transition-transform duration-300"
+                          />
                         </button>
                         <button
                           onClick={() => handleTabChange('atelier')}
-                          className="px-6 sm:px-8 py-3 border border-[#E8E0D4] hover:border-[#C9A96E] bg-white text-[#1C1C1C] text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300"
+                          className="px-6 sm:px-8 py-3 border border-[#E8E0D4] hover:border-[#C9A96E] bg-white/80 backdrop-blur-sm text-[#1C1C1C] text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300"
                         >
                           Visit Atelier
                         </button>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </main>
 
-        {/* ═══════════════════════════════════════════════════════════ */}
-        {/* ── Footer (ONLY shown on 'all' collection page) ────────── */}
-        {/* ═══════════════════════════════════════════════════════════ */}
+        {/* ── Testimonial Section ── */}
+        <AnimatePresence mode="wait">
+          {activeTab === 'all' && (
+            <motion.div
+              key="testimonials"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              <TestimonialSection />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Footer ── */}
         <AnimatePresence mode="wait">
           {activeTab === 'all' && (
             <motion.div
@@ -553,8 +647,7 @@ export default function App() {
             </motion.div>
           )}
         </AnimatePresence>
-
-      </div>{/* /z-10 content wrapper */}
+      </div>
 
       {/* ── Product Detail Drawer ── */}
       <AnimatePresence>
@@ -585,7 +678,6 @@ export default function App() {
       <AnimatePresence>
         {wishlistOpen && (
           <div className="fixed inset-0 z-50 flex justify-end">
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -594,8 +686,6 @@ export default function App() {
               onClick={() => setWishlistOpen(false)}
               className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             />
-
-            {/* Panel */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -661,7 +751,6 @@ export default function App() {
                           transition={{ duration: 0.3 }}
                           className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white border border-[#E8E0D4] hover:border-[#C9A96E]/50 transition-colors group/item"
                         >
-                          {/* Image */}
                           <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#FAF7F2] border border-[#E8E0D4] overflow-hidden shrink-0 relative">
                             <img
                               src={p.colors[0].imageUrl}
@@ -670,8 +759,6 @@ export default function App() {
                               referrerPolicy="no-referrer"
                             />
                           </div>
-
-                          {/* Info */}
                           <div className="flex-grow min-w-0 space-y-0.5">
                             <span className="block text-[8px] sm:text-[9px] text-[#9E9E9E] font-semibold uppercase tracking-wider truncate">
                               {p.leatherType}
@@ -683,8 +770,6 @@ export default function App() {
                               ${p.price.toLocaleString()}
                             </span>
                           </div>
-
-                          {/* Actions */}
                           <div className="flex flex-col gap-1.5 shrink-0">
                             <button
                               onClick={() => {
@@ -730,7 +815,6 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
-
     </div>
   );
 }

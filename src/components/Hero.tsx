@@ -10,18 +10,18 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
   const credentials = [
     {
       icon: ShieldCheck,
-      title: 'Indestructible',
-      desc: 'Authentic saddle stitch never unravels.',
+      title: 'Warranty',
+      desc: 'We are giving a 3-year warranty.',
     },
     {
       icon: Award,
-      title: 'Premier Selection',
-      desc: 'Finest French & Italian tanneries.',
+      title: 'Premier leather',
+      desc: 'We use only the finest full-grain calfskins.',
     },
     {
       icon: HeartHandshake,
-      title: '100% Hand-cut',
-      desc: 'Individually tailored by artisans.',
+      title: 'Hand-cut',
+      desc: '100% handmade and hand-finished.',
     },
   ];
 
@@ -41,7 +41,52 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
+      {/* ── Background PNG Image ── */}
+      {/* Large device: pinned to the LEFT text column, portrait-ish crop */}
+      <div
+        className="
+          hidden lg:block
+          absolute
+          top-0 left-0
+          w-[48%] xl:w-[44%]
+          h-full
+          pointer-events-none
+          z-0
+        "
+      >
+        <img
+          src="/image/bg3.png"
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover object-center"
+          style={{ opacity: 0.09 }}
+        />
+        
+      </div>
+
+      {/* Mobile / tablet: full-width centred, larger opacity so it reads well */}
+      <div
+        className="
+          block lg:hidden
+          absolute
+          inset-0
+          pointer-events-none
+          z-0
+        "
+      >
+        <img
+          src="/image/bg3.png"
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover object-center"
+          style={{ opacity: 0.055 }}
+        />
+        {/* Four-direction vignette to keep text legible */}
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-50/80 via-transparent to-stone-50/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-50/60 via-transparent to-stone-50/60" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 xl:gap-16 items-center py-10 sm:py-14 md:py-16 lg:py-20 xl:py-24">
 
           {/* ── Left: Text Content ── */}
@@ -56,7 +101,7 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
             >
               <span className="block w-8 h-px bg-amber-700" />
               <span className="text-[9px] sm:text-[10px] tracking-[0.35em] sm:tracking-[0.4em] text-amber-800 font-semibold uppercase">
-                The Pinnacle of Saddle Stitching
+                Embrace the class
               </span>
             </motion.div>
 
@@ -71,7 +116,7 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
                 Crafted for a{' '}
                 <br className="hidden sm:block" />
                 <em className="italic font-light text-amber-800 not-italic">
-                  Lifetime of Stories
+                  Lifetime
                 </em>
               </h1>
 
@@ -93,9 +138,9 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
               <button
                 onClick={onExploreClick}
                 id="hero-explore-btn"
-                className="group relative overflow-hidden px-6 sm:px-8 py-3.5 sm:py-4 bg-neutral-900 text-stone-100 text-[10px] sm:text-[11px] tracking-[0.2em] font-medium uppercase transition-all duration-500 flex items-center justify-center gap-2.5 hover:bg-amber-800 active:scale-[0.98]"
+                className="group relative overflow-hidden px-5 sm:px-8 py-2.5 sm:py-3 bg-neutral-900 text-stone-100 text-[10px] sm:text-[8px] tracking-[0.2em] font-medium uppercase transition-all duration-500 flex items-center justify-center gap-2.5 hover:bg-amber-800 active:scale-[0.98]"
               >
-                <span>Explore Collections</span>
+                <span>What We Do</span>
                 <ArrowRight
                   size={13}
                   className="group-hover:translate-x-1 transition-transform duration-300"
@@ -105,14 +150,14 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
               <button
                 onClick={onAtelierClick}
                 id="hero-atelier-btn"
-                className="group px-6 sm:px-8 py-3.5 sm:py-4 border border-neutral-300 text-neutral-700 text-[10px] sm:text-[11px] tracking-[0.2em] font-medium uppercase hover:border-neutral-900 hover:text-neutral-900 hover:bg-white transition-all duration-300 flex items-center justify-center gap-2.5 active:scale-[0.98]"
+                className="group px-5 sm:px-8 py-2.5 sm:py-3 border border-neutral-300 text-neutral-700 text-[10px] sm:text-[8px] tracking-[0.2em] font-medium uppercase hover:border-neutral-900 hover:text-neutral-900 hover:bg-white transition-all duration-300 flex items-center justify-center gap-2.5 active:scale-[0.98]"
               >
                 <Play
                   size={11}
                   className="group-hover:text-amber-800 transition-colors duration-300"
                   strokeWidth={2}
                 />
-                <span>Enter the Atelier</span>
+                <span>Value of Handmade Wallets</span>
               </button>
             </motion.div>
 
@@ -159,12 +204,6 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
               transition={{ duration: 1.1, ease: 'easeOut' }}
               className="relative w-full shadow-2xl overflow-hidden"
             >
-              {/*
-                ── Responsive aspect-ratio wrapper ──
-                mobile  (default) : 4/3  → 75vw tall feel, not too short
-                sm (640px+)       : 16/9 → cinematic widescreen
-                lg (1024px+)      : 4/3  → taller to balance the text column
-              */}
               <div className="relative w-full aspect-[3/3.5] sm:aspect-[16/9] lg:aspect-[4/3]">
 
                 {/* Video */}
@@ -188,15 +227,11 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
                   className="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-5 lg:left-5 bg-amber-800 text-amber-50 px-2.5 sm:px-3 py-1.5 sm:py-2 flex items-center gap-2 z-[2]"
                 >
                   <span className="text-[8px] sm:text-[9px] tracking-[0.2em] font-semibold uppercase">
-                    Fait Main
-                  </span>
-                  <span className="block w-px h-3 bg-amber-500/60" />
-                  <span className="text-[8px] sm:text-[9px] tracking-[0.15em] font-light opacity-80">
-                    Since 2012
+                    HandCraft in Sri-lanka
                   </span>
                 </motion.div>
 
-                {/* Floating Info Card — bottom right (hidden on xs, visible sm+) */}
+                {/* Floating Info Card — bottom right */}
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -221,7 +256,7 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
                   </div>
                 </motion.div>
 
-                {/* Stats strip — mobile only, sits at bottom of video */}
+                {/* Stats strip — mobile only */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -229,9 +264,9 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
                   className="absolute bottom-0 left-0 right-0 bg-neutral-900/80 backdrop-blur-sm px-4 py-2.5 flex justify-around sm:hidden z-[2]"
                 >
                   {[
-                    { value: '12+', label: 'Years' },
-                    { value: '100%', label: 'Hand-made' },
-                    { value: '50+', label: 'Countries' },
+                    { value: '100%', label: 'Pure Leather' },
+                    { value: '25+', label: 'Countries' },
+                    { value: '200+', label: 'Designs' },
                   ].map(({ value, label }) => (
                     <div key={label} className="text-center">
                       <p className="text-[12px] font-semibold text-amber-400 tracking-wider">

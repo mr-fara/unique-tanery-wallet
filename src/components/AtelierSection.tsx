@@ -97,6 +97,16 @@ const PATINA_BENEFITS = [
   },
 ];
 
+// ──────────────────────────────────────────
+// Reordered steps: Patina → Hide → Cut → Stitch
+// ──────────────────────────────────────────
+const ORDERED_STEP_IDS = [
+  'living-patina',
+  'hide-selection',
+  'hand-cutting',
+  'saddle-stitching',
+];
+
 export default function AtelierSection() {
   // ── Step navigation state ──
   const [activeStepIndex, setActiveStepIndex] = useState(0);
@@ -109,9 +119,15 @@ export default function AtelierSection() {
   const [expandedPatinaCard, setExpandedPatinaCard] = useState<number | null>(null);
 
   // ── Patina-specific interactive states ──
-  const [sliderPosition, setSliderPosition] = useState(50); // Before/After slider
+  const [sliderPosition, setSliderPosition] = useState(50);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [activeFactorIndex, setActiveFactorIndex] = useState(0);
+
+  // ── Build ordered steps array ──
+  const orderedSteps = ORDERED_STEP_IDS.map((id, index) => {
+    const step = ATELIER_STEPS.find((s) => s.id === id)!;
+    return { ...step, stepNumber: index + 1 };
+  });
 
   // ── Auto-play patina timeline ──
   useEffect(() => {
@@ -144,7 +160,7 @@ export default function AtelierSection() {
     setIsAutoPlaying(false);
   };
 
-  const activeStep = ATELIER_STEPS[activeStepIndex];
+  const activeStep = orderedSteps[activeStepIndex];
 
   const statItems = [
     { icon: Clock, value: '40+', label: 'Hours per piece' },
@@ -303,7 +319,7 @@ export default function AtelierSection() {
                     </div>
 
                     <ul className="space-y-1.5 xs:space-y-2 sm:space-y-3">
-                      {ATELIER_STEPS.map((step, idx) => (
+                      {orderedSteps.map((step, idx) => (
                         <li key={step.id}>
                           <motion.button
                             onClick={() => handleStepChange(idx)}
@@ -417,240 +433,8 @@ export default function AtelierSection() {
                   {/* ═══════════════════════════════════════ */}
                   <div className="flex-1 bg-stone-50 border border-stone-200 p-3 xs:p-4 sm:p-5 lg:p-6 flex flex-col justify-center items-center min-h-[220px] sm:min-h-[260px]">
                     {/* ─────────────────────────────── */}
-                    {/* STEP 1: Hide Selection            */}
+                    {/* STEP 1 (now): The Living Patina  */}
                     {/* ─────────────────────────────── */}
-                    {activeStep.id === 'hide-selection' && (
-                      <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5">
-                        <p className="text-[8px] xs:text-[9px] sm:text-[10px] text-neutral-400 uppercase tracking-[0.15em] xs:tracking-[0.2em] text-center">
-                          Select a leather family to inspect
-                        </p>
-
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 xs:gap-2 sm:gap-3">
-                          {activeStep.interactives?.map((leather, i) => (
-                            <motion.button
-                              key={leather.name}
-                              onClick={() => setSelectedLeatherFamily(i)}
-                              className={`p-2.5 xs:p-3 sm:p-4 border text-center transition-all duration-300 ${
-                                selectedLeatherFamily === i
-                                  ? 'border-neutral-800 bg-white shadow-sm'
-                                  : 'border-stone-200 hover:border-stone-300 bg-white/60'
-                              }`}
-                              whileTap={{ scale: 0.96 }}
-                            >
-                              <span
-                                className={`w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-full border block mx-auto mb-1.5 xs:mb-2 shadow-inner transition-transform duration-300 ${
-                                  selectedLeatherFamily === i
-                                    ? 'scale-110 border-neutral-400'
-                                    : 'border-neutral-200'
-                                }`}
-                                style={{ backgroundColor: leather.color }}
-                              />
-                              <span className="text-[7px] xs:text-[8px] sm:text-[9px] tracking-wider text-neutral-700 font-semibold uppercase block leading-tight">
-                                {leather.name}
-                              </span>
-                            </motion.button>
-                          ))}
-                        </div>
-
-                        <AnimatePresence mode="wait">
-                          <motion.div
-                            key={selectedLeatherFamily}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            transition={{ duration: 0.3 }}
-                            className="bg-white border border-stone-100 p-2.5 xs:p-3 sm:p-4 space-y-1.5 xs:space-y-2"
-                          >
-                            <div className="flex items-center gap-1.5 xs:gap-2 text-amber-800 font-semibold text-[8px] xs:text-[9px] sm:text-[10px] uppercase tracking-wider">
-                              <Sparkles size={11} className="xs:w-3 xs:h-3" />
-                              <span>
-                                {activeStep.interactives?.[selectedLeatherFamily].name}
-                                {' — Full-Grain Selected'}
-                              </span>
-                            </div>
-                            <p className="text-[9px] xs:text-[10px] sm:text-xs text-neutral-600 font-light leading-relaxed">
-                              <strong className="text-neutral-800 font-medium">
-                                Character:{' '}
-                              </strong>
-                              {activeStep.interactives?.[selectedLeatherFamily].textureType}
-                            </p>
-                            <p className="text-[8px] xs:text-[9px] sm:text-[10px] text-neutral-400 font-light italic leading-snug">
-                              Only the finest portions of each hide make it into
-                              UNIQUE TANERY wallets.
-                            </p>
-                          </motion.div>
-                        </AnimatePresence>
-                      </div>
-                    )}
-
-                    {/* ─────────────────────────────── */}
-                    {/* STEP 2: Hand Cutting              */}
-                    {/* ─────────────────────────────── */}
-                    {activeStep.id === 'hand-cutting' && (
-                      <div className="text-center space-y-3 xs:space-y-4 sm:space-y-5 max-w-sm w-full mx-auto">
-                        <motion.div
-                          animate={{ rotate: [0, -8, 8, -4, 4, 0] }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            repeatDelay: 3,
-                          }}
-                        >
-                          <Scissors
-                            className="mx-auto text-amber-800"
-                            size={24}
-                            strokeWidth={1.5}
-                          />
-                        </motion.div>
-
-                        <div>
-                          <h4 className="text-[10px] xs:text-[11px] sm:text-xs font-semibold text-neutral-800 uppercase tracking-wider mb-2">
-                            Precision Pattern Placement
-                          </h4>
-                          <p className="text-[9px] xs:text-[10px] sm:text-xs text-neutral-500 font-light leading-relaxed">
-                            Each wallet pattern is laid onto the leather by hand.
-                            Our artisans use steel weights and half-moon knives to
-                            cut every panel with absolute precision.
-                          </p>
-                        </div>
-
-                        <div className="space-y-1.5 xs:space-y-2">
-                          <div className="h-1.5 sm:h-2 w-full bg-stone-200 rounded-full overflow-hidden relative">
-                            <motion.div
-                              className="absolute inset-0 rounded-full"
-                              style={{
-                                background:
-                                  'linear-gradient(90deg, #92400e 0%, #d97706 50%, #92400e 100%)',
-                                backgroundSize: '200% 100%',
-                              }}
-                              animate={{ backgroundPosition: ['0% 0%', '200% 0%'] }}
-                              transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: 'linear',
-                              }}
-                            />
-                          </div>
-                          <span className="text-[7px] xs:text-[8px] sm:text-[9px] text-neutral-400 uppercase tracking-widest block">
-                            100% manual — zero machines
-                          </span>
-                        </div>
-
-                        <div className="flex flex-wrap justify-center gap-1.5 xs:gap-2">
-                          {['Steel Weights', 'Half-Moon Knife', 'Hand Beveling'].map(
-                            (tag) => (
-                              <span
-                                key={tag}
-                                className="text-[7px] xs:text-[8px] sm:text-[9px] px-2 xs:px-2.5 py-0.5 xs:py-1 bg-amber-50 text-amber-800 border border-amber-100 uppercase tracking-wider font-medium"
-                              >
-                                {tag}
-                              </span>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* ─────────────────────────────── */}
-                    {/* STEP 3: Saddle Stitching          */}
-                    {/* ─────────────────────────────── */}
-                    {activeStep.id === 'saddle-stitching' && (
-                      <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[8px] xs:text-[9px] sm:text-[10px] tracking-[0.1em] xs:tracking-[0.15em] text-neutral-400 uppercase">
-                            Saddle Stitch Simulation
-                          </span>
-                          <motion.button
-                            onClick={resetStitching}
-                            className="text-[7px] xs:text-[8px] sm:text-[9px] tracking-wider text-amber-800 hover:text-amber-900 uppercase flex items-center gap-1 xs:gap-1.5 transition-colors"
-                            whileTap={{ scale: 0.92 }}
-                          >
-                            <RefreshCw size={9} className="xs:w-2.5 xs:h-2.5" />
-                            <span>Reset</span>
-                          </motion.button>
-                        </div>
-
-                        <div className="bg-white border border-stone-200 p-3 xs:p-4 sm:p-5 relative overflow-hidden">
-                          <div className="absolute top-1/2 left-3 xs:left-4 right-3 xs:right-4 h-px bg-stone-300 -translate-y-1/2 border-dashed border-t border-stone-200" />
-                          <div className="relative z-10 flex justify-between items-center gap-1 xs:gap-1.5 sm:gap-2 min-h-[52px] xs:min-h-[60px] sm:min-h-[72px]">
-                            {Array.from({ length: 8 }).map((_, i) => (
-                              <motion.div
-                                key={i}
-                                initial={false}
-                                animate={
-                                  i < stitchCount
-                                    ? { scale: [0.8, 1.1, 1], opacity: 1 }
-                                    : { scale: 1, opacity: 1 }
-                                }
-                                transition={{ duration: 0.35 }}
-                                className={`flex-1 h-6 xs:h-7 sm:h-8 rounded-sm flex items-center justify-center transition-colors duration-300 border ${
-                                  i < stitchCount
-                                    ? 'bg-amber-50 border-amber-300'
-                                    : 'bg-stone-50 border-stone-200'
-                                }`}
-                              >
-                                {i < stitchCount && (
-                                  <motion.span
-                                    initial={{ opacity: 0, rotate: 0 }}
-                                    animate={{ opacity: 1, rotate: 12 }}
-                                    className="text-[9px] xs:text-[10px] sm:text-xs font-mono font-bold text-amber-800"
-                                  >
-                                    /
-                                  </motion.span>
-                                )}
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="space-y-1 xs:space-y-1.5">
-                          <div className="flex items-center justify-between text-[7px] xs:text-[8px] sm:text-[9px] text-neutral-400 uppercase tracking-wider">
-                            <span>Thread progress</span>
-                            <span className="font-semibold text-neutral-700">
-                              {stitchCount} / 8
-                            </span>
-                          </div>
-                          <div className="h-1 xs:h-1.5 bg-stone-200 rounded-full overflow-hidden">
-                            <motion.div
-                              className="h-full bg-amber-700 rounded-full"
-                              animate={{ width: `${(stitchCount / 8) * 100}%` }}
-                              transition={{ duration: 0.4 }}
-                            />
-                          </div>
-                        </div>
-
-                        <motion.button
-                          onClick={handleStitchClick}
-                          disabled={stitchCount >= 8}
-                          className={`w-full py-2.5 xs:py-3 text-[9px] xs:text-[10px] sm:text-xs tracking-[0.15em] xs:tracking-[0.2em] font-medium uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
-                            stitchCount >= 8
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
-                              : 'bg-neutral-900 text-white hover:bg-amber-800 active:scale-[0.98]'
-                          }`}
-                          whileTap={stitchCount < 8 ? { scale: 0.97 } : {}}
-                        >
-                          {stitchCount >= 8 ? (
-                            <>
-                              <Check size={12} strokeWidth={2.5} />
-                              <span>Seam Completed — Built to Last</span>
-                            </>
-                          ) : (
-                            <>
-                              <ArrowRight size={12} />
-                              <span>Pass Needle & Cast Stitch</span>
-                            </>
-                          )}
-                        </motion.button>
-
-                        <p className="text-[8px] xs:text-[9px] text-neutral-400 font-light italic text-center leading-snug">
-                          Two needles, one thread. If one stitch breaks, others hold.
-                        </p>
-                      </div>
-                    )}
-
-                    {/* ═══════════════════════════════════════════════════════ */}
-                    {/* ★★★ STEP 4: THE LIVING PATINA — HERO EXPERIENCE ★★★    */}
-                    {/* ═══════════════════════════════════════════════════════ */}
                     {activeStep.id === 'living-patina' && (
                       <div className="w-full space-y-4 xs:space-y-5 sm:space-y-6">
                         {/* ══════════════════════════════════════ */}
@@ -729,7 +513,9 @@ export default function AtelierSection() {
                               min="0"
                               max="100"
                               value={sliderPosition}
-                              onChange={(e) => setSliderPosition(Number(e.target.value))}
+                              onChange={(e) =>
+                                setSliderPosition(Number(e.target.value))
+                              }
                               className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-40"
                               aria-label="Drag to compare before and after patina"
                             />
@@ -811,7 +597,10 @@ export default function AtelierSection() {
                             <div className="flex items-center justify-between text-[7px] xs:text-[8px] text-neutral-500 uppercase tracking-wider">
                               <span>Aging progress</span>
                               <span className="font-bold text-amber-800">
-                                {Math.round(((patinaStage + 1) / PATINA_STAGES.length) * 100)}%
+                                {Math.round(
+                                  ((patinaStage + 1) / PATINA_STAGES.length) * 100
+                                )}
+                                %
                               </span>
                             </div>
                             <div className="h-2 xs:h-2.5 flex rounded-sm overflow-hidden border border-stone-200 relative">
@@ -827,7 +616,9 @@ export default function AtelierSection() {
                               <motion.div
                                 className="absolute top-0 bottom-0 w-1 bg-white border-x border-amber-800 shadow-lg"
                                 animate={{
-                                  left: `${((patinaStage + 1) / PATINA_STAGES.length) * 100 - 2}%`,
+                                  left: `${
+                                    ((patinaStage + 1) / PATINA_STAGES.length) * 100 - 2
+                                  }%`,
                                 }}
                                 transition={{ duration: 0.4 }}
                               />
@@ -853,7 +644,9 @@ export default function AtelierSection() {
                                 />
                                 <div
                                   className="absolute bottom-0 left-0 right-0 h-2 xs:h-2.5"
-                                  style={{ backgroundColor: PATINA_STAGES[patinaStage].color }}
+                                  style={{
+                                    backgroundColor: PATINA_STAGES[patinaStage].color,
+                                  }}
                                 />
                               </div>
 
@@ -861,7 +654,9 @@ export default function AtelierSection() {
                                 <div className="flex items-center gap-1.5 xs:gap-2 flex-wrap">
                                   <span
                                     className="w-3 h-3 rounded-full flex-shrink-0 border border-neutral-300"
-                                    style={{ backgroundColor: PATINA_STAGES[patinaStage].color }}
+                                    style={{
+                                      backgroundColor: PATINA_STAGES[patinaStage].color,
+                                    }}
                                   />
                                   <h5 className="text-[10px] xs:text-[11px] sm:text-xs font-bold text-neutral-800 uppercase tracking-wider">
                                     {PATINA_STAGES[patinaStage].label}
@@ -973,10 +768,7 @@ export default function AtelierSection() {
                                     initial={{ opacity: 0, y: 12 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{
-                                      duration: 0.5,
-                                      delay: i * 0.1,
-                                    }}
+                                    transition={{ duration: 0.5, delay: i * 0.1 }}
                                     className="text-center p-2 xs:p-2.5 sm:p-3 border border-white/10 bg-white/5 backdrop-blur-sm hover:border-amber-400/40 transition-colors"
                                   >
                                     <Icon
@@ -1095,6 +887,241 @@ export default function AtelierSection() {
                             </div>
                           </div>
                         </div>
+                      </div>
+                    )}
+
+                    {/* ─────────────────────────────── */}
+                    {/* STEP 2 (now): Hide Selection     */}
+                    {/* ─────────────────────────────── */}
+                    {activeStep.id === 'hide-selection' && (
+                      <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5">
+                        <p className="text-[8px] xs:text-[9px] sm:text-[10px] text-neutral-400 uppercase tracking-[0.15em] xs:tracking-[0.2em] text-center">
+                          Select a leather family to inspect
+                        </p>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 xs:gap-2 sm:gap-3">
+                          {activeStep.interactives?.map((leather, i) => (
+                            <motion.button
+                              key={leather.name}
+                              onClick={() => setSelectedLeatherFamily(i)}
+                              className={`p-2.5 xs:p-3 sm:p-4 border text-center transition-all duration-300 ${
+                                selectedLeatherFamily === i
+                                  ? 'border-neutral-800 bg-white shadow-sm'
+                                  : 'border-stone-200 hover:border-stone-300 bg-white/60'
+                              }`}
+                              whileTap={{ scale: 0.96 }}
+                            >
+                              <span
+                                className={`w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-full border block mx-auto mb-1.5 xs:mb-2 shadow-inner transition-transform duration-300 ${
+                                  selectedLeatherFamily === i
+                                    ? 'scale-110 border-neutral-400'
+                                    : 'border-neutral-200'
+                                }`}
+                                style={{ backgroundColor: leather.color }}
+                              />
+                              <span className="text-[7px] xs:text-[8px] sm:text-[9px] tracking-wider text-neutral-700 font-semibold uppercase block leading-tight">
+                                {leather.name}
+                              </span>
+                            </motion.button>
+                          ))}
+                        </div>
+
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={selectedLeatherFamily}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white border border-stone-100 p-2.5 xs:p-3 sm:p-4 space-y-1.5 xs:space-y-2"
+                          >
+                            <div className="flex items-center gap-1.5 xs:gap-2 text-amber-800 font-semibold text-[8px] xs:text-[9px] sm:text-[10px] uppercase tracking-wider">
+                              <Sparkles size={11} className="xs:w-3 xs:h-3" />
+                              <span>
+                                {activeStep.interactives?.[selectedLeatherFamily].name}
+                                {' — Full-Grain Selected'}
+                              </span>
+                            </div>
+                            <p className="text-[9px] xs:text-[10px] sm:text-xs text-neutral-600 font-light leading-relaxed">
+                              <strong className="text-neutral-800 font-medium">
+                                Character:{' '}
+                              </strong>
+                              {
+                                activeStep.interactives?.[selectedLeatherFamily]
+                                  .textureType
+                              }
+                            </p>
+                            <p className="text-[8px] xs:text-[9px] sm:text-[10px] text-neutral-400 font-light italic leading-snug">
+                              Only the finest portions of each hide make it into
+                              UNIQUE TANERY wallets.
+                            </p>
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                    )}
+
+                    {/* ─────────────────────────────── */}
+                    {/* STEP 3 (now): Hand Cutting       */}
+                    {/* ─────────────────────────────── */}
+                    {activeStep.id === 'hand-cutting' && (
+                      <div className="text-center space-y-3 xs:space-y-4 sm:space-y-5 max-w-sm w-full mx-auto">
+                        <motion.div
+                          animate={{ rotate: [0, -8, 8, -4, 4, 0] }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            repeatDelay: 3,
+                          }}
+                        >
+                          <Scissors
+                            className="mx-auto text-amber-800"
+                            size={24}
+                            strokeWidth={1.5}
+                          />
+                        </motion.div>
+
+                        <div>
+                          <h4 className="text-[10px] xs:text-[11px] sm:text-xs font-semibold text-neutral-800 uppercase tracking-wider mb-2">
+                            Precision Pattern Placement
+                          </h4>
+                          <p className="text-[9px] xs:text-[10px] sm:text-xs text-neutral-500 font-light leading-relaxed">
+                            Each wallet pattern is laid onto the leather by hand.
+                            Our artisans use steel weights and half-moon knives to
+                            cut every panel with absolute precision.
+                          </p>
+                        </div>
+
+                        <div className="space-y-1.5 xs:space-y-2">
+                          <div className="h-1.5 sm:h-2 w-full bg-stone-200 rounded-full overflow-hidden relative">
+                            <motion.div
+                              className="absolute inset-0 rounded-full"
+                              style={{
+                                background:
+                                  'linear-gradient(90deg, #92400e 0%, #d97706 50%, #92400e 100%)',
+                                backgroundSize: '200% 100%',
+                              }}
+                              animate={{ backgroundPosition: ['0% 0%', '200% 0%'] }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: 'linear',
+                              }}
+                            />
+                          </div>
+                          <span className="text-[7px] xs:text-[8px] sm:text-[9px] text-neutral-400 uppercase tracking-widest block">
+                            100% manual — zero machines
+                          </span>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center gap-1.5 xs:gap-2">
+                          {['Steel Weights', 'Half-Moon Knife', 'Hand Beveling'].map(
+                            (tag) => (
+                              <span
+                                key={tag}
+                                className="text-[7px] xs:text-[8px] sm:text-[9px] px-2 xs:px-2.5 py-0.5 xs:py-1 bg-amber-50 text-amber-800 border border-amber-100 uppercase tracking-wider font-medium"
+                              >
+                                {tag}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ─────────────────────────────── */}
+                    {/* STEP 4 (now): Saddle Stitching   */}
+                    {/* ─────────────────────────────── */}
+                    {activeStep.id === 'saddle-stitching' && (
+                      <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[8px] xs:text-[9px] sm:text-[10px] tracking-[0.1em] xs:tracking-[0.15em] text-neutral-400 uppercase">
+                            Saddle Stitch Simulation
+                          </span>
+                          <motion.button
+                            onClick={resetStitching}
+                            className="text-[7px] xs:text-[8px] sm:text-[9px] tracking-wider text-amber-800 hover:text-amber-900 uppercase flex items-center gap-1 xs:gap-1.5 transition-colors"
+                            whileTap={{ scale: 0.92 }}
+                          >
+                            <RefreshCw size={9} className="xs:w-2.5 xs:h-2.5" />
+                            <span>Reset</span>
+                          </motion.button>
+                        </div>
+
+                        <div className="bg-white border border-stone-200 p-3 xs:p-4 sm:p-5 relative overflow-hidden">
+                          <div className="absolute top-1/2 left-3 xs:left-4 right-3 xs:right-4 h-px bg-stone-300 -translate-y-1/2 border-dashed border-t border-stone-200" />
+                          <div className="relative z-10 flex justify-between items-center gap-1 xs:gap-1.5 sm:gap-2 min-h-[52px] xs:min-h-[60px] sm:min-h-[72px]">
+                            {Array.from({ length: 8 }).map((_, i) => (
+                              <motion.div
+                                key={i}
+                                initial={false}
+                                animate={
+                                  i < stitchCount
+                                    ? { scale: [0.8, 1.1, 1], opacity: 1 }
+                                    : { scale: 1, opacity: 1 }
+                                }
+                                transition={{ duration: 0.35 }}
+                                className={`flex-1 h-6 xs:h-7 sm:h-8 rounded-sm flex items-center justify-center transition-colors duration-300 border ${
+                                  i < stitchCount
+                                    ? 'bg-amber-50 border-amber-300'
+                                    : 'bg-stone-50 border-stone-200'
+                                }`}
+                              >
+                                {i < stitchCount && (
+                                  <motion.span
+                                    initial={{ opacity: 0, rotate: 0 }}
+                                    animate={{ opacity: 1, rotate: 12 }}
+                                    className="text-[9px] xs:text-[10px] sm:text-xs font-mono font-bold text-amber-800"
+                                  >
+                                    /
+                                  </motion.span>
+                                )}
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="space-y-1 xs:space-y-1.5">
+                          <div className="flex items-center justify-between text-[7px] xs:text-[8px] sm:text-[9px] text-neutral-400 uppercase tracking-wider">
+                            <span>Thread progress</span>
+                            <span className="font-semibold text-neutral-700">
+                              {stitchCount} / 8
+                            </span>
+                          </div>
+                          <div className="h-1 xs:h-1.5 bg-stone-200 rounded-full overflow-hidden">
+                            <motion.div
+                              className="h-full bg-amber-700 rounded-full"
+                              animate={{ width: `${(stitchCount / 8) * 100}%` }}
+                              transition={{ duration: 0.4 }}
+                            />
+                          </div>
+                        </div>
+
+                        <motion.button
+                          onClick={handleStitchClick}
+                          disabled={stitchCount >= 8}
+                          className={`w-full py-2.5 xs:py-3 text-[9px] xs:text-[10px] sm:text-xs tracking-[0.15em] xs:tracking-[0.2em] font-medium uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
+                            stitchCount >= 8
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
+                              : 'bg-neutral-900 text-white hover:bg-amber-800 active:scale-[0.98]'
+                          }`}
+                          whileTap={stitchCount < 8 ? { scale: 0.97 } : {}}
+                        >
+                          {stitchCount >= 8 ? (
+                            <>
+                              <Check size={12} strokeWidth={2.5} />
+                              <span>Seam Completed — Built to Last</span>
+                            </>
+                          ) : (
+                            <>
+                              <ArrowRight size={12} />
+                              <span>Pass Needle & Cast Stitch</span>
+                            </>
+                          )}
+                        </motion.button>
+
+                        <p className="text-[8px] xs:text-[9px] text-neutral-400 font-light italic text-center leading-snug">
+                          Two needles, one thread. If one stitch breaks, others hold.
+                        </p>
                       </div>
                     )}
                   </div>

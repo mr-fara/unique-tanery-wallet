@@ -24,7 +24,14 @@ import {
   Info,
   User,
   FileText,
+  X,
+  ZoomIn,
+  MessageCircle,
 } from 'lucide-react';
+
+// ── WhatsApp Config ───────────────────────────────────────────────────────────
+// 075 636 4542 → international format (Sri Lanka +94)
+const WHATSAPP_NUMBER = '94756364542';
 
 // ── Style tokens ──────────────────────────────────────────────────────────────
 const INPUT_BASE =
@@ -53,10 +60,9 @@ interface FormData {
   phone: string;
   country: string;
   category: string;
+  design: string;
   leather: string;
   color: string;
-  hardware: string;
-  lining: string;
   specifications: string;
   wristSize: string;
   lugWidth: string;
@@ -72,10 +78,9 @@ const DEFAULT_FORM: FormData = {
   phone: '',
   country: '',
   category: 'watch-strap',
+  design: 'Classic Heritage',
   leather: 'Barenia Calfskin',
   color: '',
-  hardware: 'gold',
-  lining: 'natural',
   specifications: '',
   wristSize: '',
   lugWidth: '20mm',
@@ -121,6 +126,54 @@ const CATEGORY_OPTIONS = [
   },
 ];
 
+// ── NEW: Design Selection Options ─────────────────────────────────────────────
+const DESIGN_OPTIONS = [
+  {
+    value: 'Classic Heritage',
+    label: 'Classic Heritage',
+    sub: 'Timeless silhouette with traditional saddle stitching',
+    grade: 'Signature',
+    image:
+      'https://ceylonleathercrafts.com/cdn/shop/files/ChatGPT_Image_Jun_10_2026_01_28_38_PM_1170x.png?v=1781078336',
+    description:
+      'Our Classic Heritage design honours traditional leathercraft. Clean lines, hand-burnished edges, and prominent saddle stitching create a piece that feels both timeless and enduring. Ideal for those who appreciate understated, old-world elegance.',
+    characteristics: ['Traditional saddle stitch', 'Hand-burnished edges', 'Timeless silhouette', 'Understated elegance'],
+  },
+  {
+    value: 'Minimal Modern',
+    label: 'Minimal Modern',
+    sub: 'Clean-cut edges, hidden seams & sleek profile',
+    grade: 'Contemporary',
+    image:
+      'https://ceylonleathercrafts.com/cdn/shop/files/ChatGPT_Image_Jun_10_2026_01_24_53_PM_1170x.png?v=1781078113',
+    description:
+      'Minimal Modern strips the design down to its purest form. Hidden seams, ultra-slim profiles, and precisely cut edges deliver a contemporary aesthetic that pairs beautifully with modern lifestyles. Less is truly more.',
+    characteristics: ['Hidden seam construction', 'Ultra-slim profile', 'Precision-cut edges', 'Contemporary aesthetic'],
+  },
+  {
+    value: 'Artisan Rustic',
+    label: 'Artisan Rustic',
+    sub: 'Raw textures, visible grain & organic character',
+    grade: 'Handcraft',
+    image:
+      'https://ceylonleathercrafts.com/cdn/shop/files/ChatGPT_Image_Jun_10_2026_02_45_31_PM_1170x.png?v=1781082953',
+    description:
+      'Artisan Rustic celebrates the natural beauty of leather. Raw-edge finishes, visible grain, and organic textures give each piece a warm, handcrafted character that becomes richer and more personal with every use.',
+    characteristics: ['Raw-edge finish', 'Visible natural grain', 'Organic textures', 'Ages with character'],
+  },
+  {
+    value: 'Executive Luxe',
+    label: 'Executive Luxe',
+    sub: 'Refined structure with premium detailing',
+    grade: 'Premium',
+    image:
+      'https://ceylonleathercrafts.com/cdn/shop/files/ChatGPT_Image_Jun_10_2026_02_22_57_PM_1170x.png?v=1781081607',
+    description:
+      'Executive Luxe is crafted for those who demand refinement. Structured panels, precision detailing, and a polished finish create a commanding presence — perfect for the boardroom, formal occasions, and discerning collectors.',
+    characteristics: ['Structured panels', 'Precision detailing', 'Polished finish', 'Commanding presence'],
+  },
+];
+
 const LEATHER_OPTIONS = [
   {
     value: 'Barenia Calfskin',
@@ -129,6 +182,11 @@ const LEATHER_OPTIONS = [
     sub: 'Smooth, warm tan — develops beautiful patina',
     color: '#C8845A',
     grade: 'Prestige',
+    image: '/image/leather1.jpg',
+    popupImages: ['/image/leather1.jpg', '/image/leather2.jpg', '/image/leather3.jpg'],
+    description:
+      'Barenia is one of the most prestigious leathers in the world, produced exclusively in France. Its smooth, supple surface develops a rich, warm patina with use, making each piece uniquely personal over time. Naturally tanned using traditional methods, it is remarkably resistant to water and scratches.',
+    characteristics: ['Smooth hand feel', 'Develops deep patina', 'Water-resistant', 'Naturally tanned'],
   },
   {
     value: 'Epsom Leather',
@@ -137,6 +195,11 @@ const LEATHER_OPTIONS = [
     sub: 'Rigid, scratch-resistant embossed grain',
     color: '#2C1810',
     grade: 'Classic',
+    image: '/image/leather2.jpg',
+    popupImages: ['/image/leather2.jpg', '/image/leather3.jpg', '/image/leather4.jpg'],
+    description:
+      'Epsom is a calfskin leather embossed with a fine, regular cross-grain pattern. This process makes the leather highly rigid, lightweight, and extremely resistant to scratches and moisture. It holds its shape beautifully and is one of the most recognisable luxury leather textures in the world.',
+    characteristics: ['Embossed cross-grain', 'Scratch-resistant', 'Shape-retaining', 'Lightweight'],
   },
   {
     value: 'Togo Drummed',
@@ -145,6 +208,11 @@ const LEATHER_OPTIONS = [
     sub: 'Pebbled texture, soft & lightweight',
     color: '#8B6914',
     grade: 'Classic',
+    image: '/image/leather3.jpg',
+    popupImages: ['/image/leather3.jpg', '/image/leather4.jpg', '/image/leather5.jpg'],
+    description:
+      'Togo is a fine-grained, pebbled calfskin leather produced in Germany. Its soft, supple texture and lightweight nature make it incredibly comfortable to carry. The natural grain pattern provides excellent scratch resistance and gives each piece a distinctive, tactile character.',
+    characteristics: ['Pebbled grain', 'Soft & supple', 'Lightweight', 'Scratch-resistant'],
   },
   {
     value: 'Chevre Goatskin',
@@ -153,6 +221,11 @@ const LEATHER_OPTIONS = [
     sub: 'Finely textured, extremely durable',
     color: '#4A5C3A',
     grade: 'Prestige',
+    image: '/image/leather4.jpg',
+    popupImages: ['/image/leather4.jpg', '/image/leather5.jpg', '/image/leather6.jpg'],
+    description:
+      'Chevre goatskin from Madagascar is celebrated for its exceptional durability and fine, chevron-like grain pattern. Lighter and stronger than most cowhides, it withstands daily wear beautifully. Its characteristic sheen and tight, even grain give it an understated elegance that improves with age.',
+    characteristics: ['Chevron grain pattern', 'Highly durable', 'Natural sheen', 'Age-improving'],
   },
   {
     value: 'Matte Alligator',
@@ -161,6 +234,11 @@ const LEATHER_OPTIONS = [
     sub: 'Symmetric scale pattern — ultra luxury',
     color: '#1A2C1A',
     grade: 'Haute',
+    image: '/image/leather5.jpg',
+    popupImages: ['/image/leather5.jpg', '/image/leather6.jpg', '/image/leather7.jpg'],
+    description:
+      'Louisiana alligator leather represents the absolute pinnacle of leathercraft. Each hide features a perfectly symmetric scale pattern unique to every animal. The matte finish reveals the natural texture in its purest form, exuding quiet luxury and extraordinary craftsmanship. CITES certified and ethically sourced.',
+    characteristics: ['Symmetric scales', 'CITES certified', 'Ultra-luxury grade', 'Unique per hide'],
   },
   {
     value: 'Box Calf',
@@ -169,21 +247,12 @@ const LEATHER_OPTIONS = [
     sub: 'Mirror-polished, structured & firm',
     color: '#1C1C1C',
     grade: 'Heritage',
+    image: '/image/leather6.jpg',
+    popupImages: ['/image/leather6.jpg', '/image/leather7.jpg', '/image/leather8.jpg'],
+    description:
+      'Box Calf is a firm, chrome-tanned calfskin from England with a characteristic high-gloss, mirror-like finish. Developed in the 19th century for fine shoes and accessories, it is known for its structural integrity and deep, lustrous shine. It burnishes beautifully at the edges and ages with great dignity.',
+    characteristics: ['Mirror-polished', 'Chrome-tanned', 'Firm structure', 'Edge-burnishes beautifully'],
   },
-];
-
-const HARDWARE_OPTIONS = [
-  { value: 'gold', label: 'Brushed Gold', color: '#C9A96E' },
-  { value: 'silver', label: 'Palladium Silver', color: '#C0C0C0' },
-  { value: 'ruthenium', label: 'Ruthenium Dark', color: '#3A3A3A' },
-  { value: 'none', label: 'No Hardware', color: '#E8E0D4' },
-];
-
-const LINING_OPTIONS = [
-  { value: 'natural', label: 'Natural Goatskin' },
-  { value: 'lambskin', label: 'Soft Lambskin' },
-  { value: 'suede', label: 'Alcantara Suede' },
-  { value: 'canvas', label: 'Cotton Canvas' },
 ];
 
 const TIMELINE_OPTIONS = [
@@ -278,6 +347,218 @@ const StepHeader = ({
   </div>
 );
 
+// ── Generic Detail Popup (used for both Design & Leather) ────────────────────
+const DetailPopup = ({
+  title,
+  sub,
+  grade,
+  origin,
+  images,
+  description,
+  characteristics,
+  swatchColor,
+  onClose,
+  onSelect,
+  isSelected,
+}: {
+  title: string;
+  sub: string;
+  grade: string;
+  origin?: string;
+  images: string[];
+  description: string;
+  characteristics: string[];
+  swatchColor?: string;
+  onClose: () => void;
+  onSelect: () => void;
+  isSelected: boolean;
+}) => {
+  const [activeImage, setActiveImage] = useState(0);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      onClick={onClose}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+
+      {/* Modal */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.94, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.94, y: 16 }}
+        transition={{ duration: 0.28, ease: 'easeOut' }}
+        className="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#C9A96E] to-[#B8860B] z-10" />
+
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 w-8 h-8 bg-[#1C1C1C] flex items-center justify-center hover:bg-[#C9A96E] transition-colors duration-200"
+        >
+          <X size={13} className="text-white" strokeWidth={2} />
+        </button>
+
+        <div className="overflow-y-auto max-h-[90vh]">
+          {/* Main image */}
+          <div className="relative h-56 sm:h-72 overflow-hidden bg-neutral-900">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={activeImage}
+                src={images[activeImage]}
+                alt={title}
+                initial={{ opacity: 0, scale: 1.04 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.35 }}
+                className="w-full h-full object-cover"
+              />
+            </AnimatePresence>
+
+            <div className="absolute bottom-3 left-3">
+              <span className={`text-[7px] font-bold uppercase tracking-wider px-2.5 py-1 ${
+                grade === 'Haute'
+                  ? 'bg-[#1C1C1C] text-[#C9A96E]'
+                  : grade === 'Prestige' || grade === 'Premium' || grade === 'Signature'
+                  ? 'bg-[#C9A96E] text-white'
+                  : 'bg-white/90 text-[#1C1C1C]'
+              }`}>
+                {grade}
+              </span>
+            </div>
+
+            {origin && (
+              <div className="absolute bottom-3 right-3">
+                <span className="text-[7px] font-semibold uppercase tracking-wider px-2.5 py-1 bg-black/60 text-white backdrop-blur-sm">
+                  {origin}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Thumbnail strip */}
+          {images.length > 1 && (
+            <div className="flex gap-2 px-5 pt-3">
+              {images.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImage(i)}
+                  className={`relative w-16 h-12 overflow-hidden border-2 transition-all duration-200 shrink-0 ${
+                    activeImage === i ? 'border-[#C9A96E]' : 'border-transparent hover:border-[#E8E0D4]'
+                  }`}
+                >
+                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  {activeImage === i && <div className="absolute inset-0 bg-[#C9A96E]/10" />}
+                </button>
+              ))}
+              <div className="flex items-center gap-1 ml-auto">
+                <ZoomIn size={9} className="text-[#9E9E9E]" />
+                <span className="text-[7px] text-[#9E9E9E] font-light">Click to preview</span>
+              </div>
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="p-5 sm:p-6 space-y-4">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-1.5">
+                <h3 className="text-sm sm:text-base font-bold text-[#1C1C1C] uppercase tracking-[0.15em]">
+                  {title}
+                </h3>
+                {swatchColor && (
+                  <div className="flex items-center gap-1.5 shrink-0 mt-0.5">
+                    <div
+                      className="w-4 h-4 border border-neutral-200"
+                      style={{ backgroundColor: swatchColor }}
+                    />
+                    <span className="text-[8px] text-[#9E9E9E] font-light">Colour reference</span>
+                  </div>
+                )}
+              </div>
+              <p className="text-[9px] sm:text-[10px] text-[#9E9E9E] font-light leading-relaxed">
+                {sub}
+              </p>
+            </div>
+
+            <p className="text-[9px] sm:text-[10px] text-[#4A4A4A] font-light leading-relaxed border-l-2 border-[#C9A96E]/30 pl-3">
+              {description}
+            </p>
+
+            <div>
+              <p className="text-[7px] font-bold uppercase tracking-[0.25em] text-[#9E9E9E] mb-2">
+                Key Characteristics
+              </p>
+              <div className="grid grid-cols-2 gap-1.5">
+                {characteristics.map((char) => (
+                  <div key={char} className="flex items-center gap-2 p-2 bg-[#FAF7F2] border border-[#E8E0D4]">
+                    <div className="w-1 h-1 rounded-full bg-[#C9A96E] shrink-0" />
+                    <span className="text-[8px] text-[#4A4A4A] font-light">{char}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-3 border border-[#E8E0D4] bg-[#FAF7F2]">
+              <div className="w-px h-8 bg-[#C9A96E]" />
+              {origin && (
+                <>
+                  <div>
+                    <p className="text-[7px] font-bold uppercase tracking-[0.25em] text-[#9E9E9E]">Origin</p>
+                    <p className="text-[9px] font-semibold text-[#1C1C1C] uppercase tracking-wider">{origin}</p>
+                  </div>
+                  <div className="w-px h-8 bg-[#E8E0D4] ml-4" />
+                </>
+              )}
+              <div>
+                <p className="text-[7px] font-bold uppercase tracking-[0.25em] text-[#9E9E9E]">Grade</p>
+                <p className="text-[9px] font-semibold text-[#C9A96E] uppercase tracking-wider">{grade}</p>
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-1">
+              <motion.button
+                type="button"
+                onClick={() => { onSelect(); onClose(); }}
+                whileTap={{ scale: 0.97 }}
+                className={`flex-1 py-3.5 text-[9px] font-bold uppercase tracking-[0.2em] transition-all duration-200 flex items-center justify-center gap-2 ${
+                  isSelected
+                    ? 'bg-[#C9A96E] text-white'
+                    : 'bg-[#1C1C1C] hover:bg-[#C9A96E] text-white'
+                }`}
+              >
+                {isSelected ? (
+                  <>
+                    <Check size={11} strokeWidth={2.5} />
+                    Selected
+                  </>
+                ) : (
+                  <>
+                    Select This Option
+                    <ArrowRight size={11} />
+                  </>
+                )}
+              </motion.button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-5 py-3.5 border border-[#E8E0D4] text-[9px] font-bold uppercase tracking-[0.2em] text-[#9E9E9E] hover:border-[#1C1C1C] hover:text-[#1C1C1C] transition-all duration-200"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function CustomCommission() {
   const [formData, setFormData] = useState<FormData>(DEFAULT_FORM);
@@ -285,12 +566,15 @@ export default function CustomCommission() {
   const [commissionId, setCommissionId] = useState('');
   const [formErrors, setFormErrors] = useState<Partial<FormData>>({});
   const [activeStep, setActiveStep] = useState(1);
-  const [hoveredLeather, setHoveredLeather] = useState<string | null>(null);
+  const [leatherPopup, setLeatherPopup] = useState<string | null>(null);
+  const [designPopup, setDesignPopup] = useState<string | null>(null);
 
   const selectedLeather = LEATHER_OPTIONS.find((l) => l.value === formData.leather);
+  const selectedDesign = DESIGN_OPTIONS.find((d) => d.value === formData.design);
   const selectedCategory = CATEGORY_OPTIONS.find((c) => c.value === formData.category);
   const isWatchStrap = formData.category === 'watch-strap';
-  const totalSteps = isWatchStrap ? 4 : 3;
+  const popupLeather = LEATHER_OPTIONS.find((l) => l.value === leatherPopup);
+  const popupDesign = DESIGN_OPTIONS.find((d) => d.value === designPopup);
 
   const validate = (): boolean => {
     const e: Partial<FormData> = {};
@@ -302,14 +586,80 @@ export default function CustomCommission() {
     return !Object.keys(e).length;
   };
 
+  // ── Build WhatsApp message with all commission details ──
+  const buildWhatsAppMessage = (registryId: string): string => {
+    const timeline = TIMELINE_OPTIONS.find((t) => t.value === formData.timeline);
+    const stitchingLabels: Record<string, string> = {
+      contrasting: 'Ecru Linen (Contrasting)',
+      tonal: 'Tonal Match',
+      black: 'Black Waxed Thread',
+    };
+
+    const lines = [
+      '🏷️ *NEW BESPOKE COMMISSION INQUIRY*',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '',
+      `📋 *Registry ID:* ${registryId}`,
+      '',
+      '👤 *CLIENT DETAILS*',
+      `• Name: ${formData.name}`,
+      `• Email: ${formData.email}`,
+      formData.phone ? `• Phone: ${formData.phone}` : '',
+      formData.country ? `• Country: ${formData.country}` : '',
+      '',
+      '🛠️ *PRODUCT & MATERIALS*',
+      `• Product: ${selectedCategory?.label ?? formData.category}`,
+      `• Design Style: ${selectedDesign?.label ?? formData.design} (${selectedDesign?.grade ?? ''})`,
+      `• Leather: ${selectedLeather?.label ?? formData.leather}`,
+      `• Leather Origin: ${selectedLeather?.origin ?? '-'}`,
+      `• Leather Grade: ${selectedLeather?.grade ?? '-'}`,
+      '',
+    ];
+
+    if (isWatchStrap) {
+      lines.push(
+        '⌚ *STRAP MEASUREMENTS*',
+        `• Lug Width: ${formData.lugWidth}`,
+        `• Wrist Size: ${formData.wristSize}`,
+        `• Stitch Thread: ${stitchingLabels[formData.stitching] ?? formData.stitching}`,
+        formData.color ? `• Watch Ref: ${formData.color}` : '',
+        ''
+      );
+    }
+
+    lines.push(
+      '📝 *SPECIFICATIONS*',
+      formData.specifications,
+      '',
+      '⏱️ *TIMELINE & BUDGET*',
+      `• Timeline: ${timeline?.label ?? formData.timeline} (${timeline?.detail ?? ''}) — ${timeline?.price ?? ''}`,
+      formData.budget ? `• Budget: ${formData.budget}` : '• Budget: Not specified',
+      formData.referenceImages ? `• References: ${formData.referenceImages}` : '',
+      '',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '✨ Sent via Unique Tanery Commission Form'
+    );
+
+    return lines.filter((l) => l !== '').join('\n');
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
+
+    const registryId =
+      'UT-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 90000 + 10000);
+
     setTimeout(() => {
       setIsSubmitting(false);
-      setCommissionId('UT-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 90000 + 10000));
-    }, 2000);
+      setCommissionId(registryId);
+
+      // ── Redirect to WhatsApp with full commission details ──
+      const message = buildWhatsAppMessage(registryId);
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }, 1500);
   };
 
   const handleReset = () => {
@@ -329,7 +679,6 @@ export default function CustomCommission() {
 
       {/* ══ HERO BAND ════════════════════════════════════════════════════════ */}
       <div className="relative bg-[#1C1C1C] overflow-hidden">
-        {/* Background texture lines */}
         <div className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage: 'repeating-linear-gradient(90deg, #C9A96E 0px, #C9A96E 1px, transparent 1px, transparent 60px)',
@@ -340,13 +689,11 @@ export default function CustomCommission() {
             backgroundImage: 'repeating-linear-gradient(0deg, #C9A96E 0px, #C9A96E 1px, transparent 1px, transparent 60px)',
           }}
         />
-        {/* Gold accent line top */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 sm:py-16 lg:py-20">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-12">
 
-            {/* Left: Heading */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
@@ -371,7 +718,6 @@ export default function CustomCommission() {
                 standard — shaped by your specifications, finished by hand.
               </p>
 
-              {/* Atelier stats */}
               <div className="flex flex-wrap gap-5 sm:gap-8 pt-2">
                 {ATELIER_FACTS.map(({ label, value }) => (
                   <div key={label} className="flex flex-col gap-0.5">
@@ -382,7 +728,6 @@ export default function CustomCommission() {
               </div>
             </motion.div>
 
-            {/* Right: Process Steps */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -424,7 +769,6 @@ export default function CustomCommission() {
           </div>
         </div>
 
-        {/* Bottom gold line */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A96E]/40 to-transparent" />
       </div>
 
@@ -435,7 +779,6 @@ export default function CustomCommission() {
           {/* ── LEFT SIDEBAR ──────────────────────────────────────────────── */}
           <div className="hidden xl:flex flex-col gap-5 w-64 2xl:w-72 shrink-0">
 
-            {/* Atelier Contact Card */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -454,9 +797,9 @@ export default function CustomCommission() {
                 <div className="space-y-2.5 pt-1 border-t border-[#F0EBE3]">
                   {[
                     { icon: Mail, text: 'atelier@uniquetanery.com' },
-                    { icon: Phone, text: '+261 20 22 123 456' },
-                    { icon: MapPin, text: 'Antananarivo, Madagascar' },
-                    { icon: Clock, text: 'Mon–Sat, 08:00–17:00 EAST' },
+                    { icon: Phone, text: '075 636 4542' },
+                    { icon: MessageCircle, text: 'WhatsApp inquiries welcome' },
+                    { icon: Clock, text: 'Mon–Sat, 08:00–17:00' },
                   ].map(({ icon: Icon, text }) => (
                     <div key={text} className="flex items-start gap-2">
                       <Icon size={10} className="text-[#C9A96E] mt-0.5 shrink-0" strokeWidth={1.5} />
@@ -467,7 +810,6 @@ export default function CustomCommission() {
               </div>
             </motion.div>
 
-            {/* Guarantees */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -492,7 +834,6 @@ export default function CustomCommission() {
               ))}
             </motion.div>
 
-            {/* Mobile process steps */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -523,19 +864,48 @@ export default function CustomCommission() {
               })}
             </motion.div>
 
-            {/* Leather Swatch Preview */}
-            {selectedLeather && (
+            {/* Selected Design + Leather Preview */}
+            {selectedDesign && (
               <motion.div
-                key={selectedLeather.value}
+                key={'d-' + selectedDesign.value}
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
                 className="bg-white border border-[#E8E0D4] overflow-hidden"
               >
-                <div
-                  className="h-24"
-                  style={{ backgroundColor: selectedLeather.color }}
-                />
+                <div className="relative h-24 overflow-hidden">
+                  <img src={selectedDesign.image} alt={selectedDesign.label} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </div>
+                <div className="p-4 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[9px] font-bold text-[#1C1C1C] uppercase tracking-wider">
+                      {selectedDesign.label}
+                    </p>
+                    <span className="text-[7px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-[#C9A96E]/10 text-[#C9A96E] border border-[#C9A96E]/30">
+                      {selectedDesign.grade}
+                    </span>
+                  </div>
+                  <p className="text-[8px] text-[#9E9E9E] font-light leading-relaxed">{selectedDesign.sub}</p>
+                  <p className="text-[7px] text-[#C9A96E] font-semibold uppercase tracking-wider">
+                    Selected Design Style
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {selectedLeather && (
+              <motion.div
+                key={'l-' + selectedLeather.value}
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white border border-[#E8E0D4] overflow-hidden"
+              >
+                <div className="relative h-24 overflow-hidden">
+                  <img src={selectedLeather.image} alt={selectedLeather.label} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </div>
                 <div className="p-4 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <p className="text-[9px] font-bold text-[#1C1C1C] uppercase tracking-wider">
@@ -551,9 +921,7 @@ export default function CustomCommission() {
                       {selectedLeather.grade}
                     </span>
                   </div>
-                  <p className="text-[8px] text-[#9E9E9E] font-light leading-relaxed">
-                    {selectedLeather.sub}
-                  </p>
+                  <p className="text-[8px] text-[#9E9E9E] font-light leading-relaxed">{selectedLeather.sub}</p>
                   <p className="text-[7px] text-[#C9A96E] font-semibold uppercase tracking-wider">
                     Origin: {selectedLeather.origin}
                   </p>
@@ -566,7 +934,6 @@ export default function CustomCommission() {
           <div className="flex-1 min-w-0">
             <AnimatePresence mode="wait">
 
-              {/* ════════════ FORM ════════════ */}
               {!commissionId ? (
                 <motion.div
                   key="form"
@@ -585,7 +952,7 @@ export default function CustomCommission() {
                             Commission Request Form
                           </h2>
                           <p className="text-[8px] sm:text-[9px] text-[#9E9E9E] mt-0.5 tracking-wider font-light">
-                            All fields marked with · are required for a precise artisan quote
+                            All fields marked with · are required — inquiry sent directly via WhatsApp
                           </p>
                         </div>
                       </div>
@@ -609,9 +976,7 @@ export default function CustomCommission() {
                               key={label}
                               onClick={() => setActiveStep(stepNum)}
                               className={`flex-1 px-2 py-3 text-center border-r last:border-r-0 border-[#F0EBE3] transition-all duration-200 group ${
-                                isActive
-                                  ? 'bg-[#FAF7F2]'
-                                  : 'hover:bg-[#FAF7F2]/50'
+                                isActive ? 'bg-[#FAF7F2]' : 'hover:bg-[#FAF7F2]/50'
                               }`}
                             >
                               <div className="flex items-center justify-center gap-1.5">
@@ -689,7 +1054,7 @@ export default function CustomCommission() {
                             type="tel"
                             value={formData.phone}
                             onChange={(e) => update('phone', e.target.value)}
-                            placeholder="+1 212 000 0000"
+                            placeholder="+94 75 000 0000"
                             className={`${INPUT_BASE} ${INPUT_OK}`}
                           />
                         </div>
@@ -702,7 +1067,7 @@ export default function CustomCommission() {
                               className={`${SELECT_BASE} ${INPUT_OK}`}
                             >
                               <option value="">Select country...</option>
-                              {['United States', 'United Kingdom', 'France', 'Germany', 'Japan', 'Australia', 'Canada', 'Switzerland', 'Italy', 'Other'].map((c) => (
+                              {['Sri Lanka', 'United States', 'United Kingdom', 'France', 'Germany', 'Japan', 'Australia', 'Canada', 'Switzerland', 'Italy', 'Other'].map((c) => (
                                 <option key={c} value={c}>{c}</option>
                               ))}
                             </select>
@@ -711,12 +1076,11 @@ export default function CustomCommission() {
                         </div>
                       </div>
 
-                      {/* Info notice */}
                       <div className="flex items-start gap-3 p-3.5 bg-[#FAF7F2] border border-[#E8E0D4]">
-                        <Info size={12} className="text-[#C9A96E] mt-0.5 shrink-0" strokeWidth={1.5} />
+                        <MessageCircle size={12} className="text-[#C9A96E] mt-0.5 shrink-0" strokeWidth={1.5} />
                         <p className="text-[8px] sm:text-[9px] text-[#9E9E9E] font-light leading-relaxed">
-                          We respond to all commission inquiries within 24 business hours. For urgent requests,
-                          please mention your timeline in the specifications field below.
+                          When you submit this form, your full commission details will open directly in
+                          WhatsApp so you can chat with our artisan instantly. We respond within 24 business hours.
                         </p>
                       </div>
                     </motion.div>
@@ -732,7 +1096,7 @@ export default function CustomCommission() {
                         num="02"
                         icon={Palette}
                         title="Product Category & Materials"
-                        subtitle="Select the type of piece, your preferred leather hide, and finishing details."
+                        subtitle="Select the type of piece, your preferred design style, and leather hide."
                       />
 
                       {/* Category Selection */}
@@ -792,130 +1156,264 @@ export default function CustomCommission() {
                         </div>
                       </div>
 
-                      <SectionDivider label="Leather Selection" />
+                      {/* ══ NEW: DESIGN SELECTION ══ */}
+                      <SectionDivider label="Design Selection" />
 
-                      {/* Leather Selection */}
-                      <div className="space-y-2.5">
-                        <label className={LABEL}>Hide & Grain <span className="text-[#C9A96E]">·</span></label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                          {LEATHER_OPTIONS.map((leather) => {
-                            const sel = formData.leather === leather.value;
-                            const hovered = hoveredLeather === leather.value;
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <label className={LABEL}>
+                            Design Style <span className="text-[#C9A96E]">·</span>
+                          </label>
+                          <span className="text-[7px] text-[#9E9E9E] font-light flex items-center gap-1">
+                            <ZoomIn size={8} className="text-[#C9A96E]" />
+                            Tap any card to view detail
+                          </span>
+                        </div>
+
+                        {/* Selected design banner */}
+                        <AnimatePresence>
+                          {selectedDesign && (
+                            <motion.div
+                              key={selectedDesign.value}
+                              initial={{ opacity: 0, y: -6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -6 }}
+                              transition={{ duration: 0.2 }}
+                              className="flex items-center gap-3 px-3.5 py-2.5 bg-[#1C1C1C] border border-[#1C1C1C]"
+                            >
+                              <div className="relative w-8 h-8 overflow-hidden shrink-0">
+                                <img
+                                  src={selectedDesign.image}
+                                  alt={selectedDesign.label}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-[8px] font-bold text-white uppercase tracking-[0.2em]">
+                                  {selectedDesign.label}
+                                </p>
+                                <p className="text-[7px] text-neutral-400 font-light">{selectedDesign.grade} Design</p>
+                              </div>
+                              <Check size={11} className="text-[#C9A96E]" strokeWidth={2.5} />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Design grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                          {DESIGN_OPTIONS.map((design, idx) => {
+                            const sel = formData.design === design.value;
                             return (
                               <motion.button
-                                key={leather.value}
+                                key={design.value}
                                 type="button"
-                                onClick={() => update('leather', leather.value)}
-                                onMouseEnter={() => setHoveredLeather(leather.value)}
-                                onMouseLeave={() => setHoveredLeather(null)}
+                                onClick={() => setDesignPopup(design.value)}
                                 whileTap={{ scale: 0.97 }}
-                                className={`relative p-3 border text-left flex gap-3 items-start transition-all duration-200 ${
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                className={`relative group text-left overflow-hidden border-2 transition-all duration-200 ${
                                   sel
-                                    ? 'border-[#1C1C1C] bg-white shadow-sm'
-                                    : 'border-[#E8E0D4] bg-[#FAF7F2] hover:border-[#C9A96E]/40 hover:bg-white'
+                                    ? 'border-[#C9A96E] shadow-md'
+                                    : 'border-transparent hover:border-[#C9A96E]/40'
                                 }`}
                               >
-                                {/* Color swatch */}
-                                <div
-                                  className={`w-8 h-10 shrink-0 border transition-all duration-200 ${
-                                    sel ? 'border-[#C9A96E]/50 shadow-sm' : 'border-neutral-200'
-                                  }`}
-                                  style={{ backgroundColor: leather.color }}
-                                />
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-start justify-between gap-1 mb-0.5">
-                                    <p className="text-[8px] sm:text-[9px] font-bold text-[#1C1C1C] uppercase tracking-wider leading-tight">
-                                      {leather.label}
-                                    </p>
+                                {/* Image */}
+                                <div className="relative h-32 sm:h-36 overflow-hidden bg-neutral-200">
+                                  <img
+                                    src={design.image}
+                                    alt={design.label}
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                  />
+                                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                                    <div className="w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                      <ZoomIn size={13} className="text-[#1C1C1C]" />
+                                    </div>
+                                  </div>
+
+                                  <AnimatePresence>
                                     {sel && (
                                       <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        className="w-3.5 h-3.5 bg-[#C9A96E] flex items-center justify-center shrink-0"
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0, opacity: 0 }}
+                                        className="absolute top-2 right-2 w-6 h-6 bg-[#C9A96E] flex items-center justify-center shadow-md"
                                       >
-                                        <Check size={7} className="text-white" strokeWidth={3} />
+                                        <Check size={10} className="text-white" strokeWidth={3} />
                                       </motion.div>
                                     )}
+                                  </AnimatePresence>
+
+                                  <div className="absolute top-2 left-2">
+                                    <span className="text-[6px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-[#C9A96E] text-white">
+                                      {design.grade}
+                                    </span>
                                   </div>
-                                  <p className="text-[7px] text-[#9E9E9E] leading-snug mb-1.5">{leather.sub}</p>
-                                  <div className="flex items-center gap-1.5">
-                                    <span className={`text-[6px] font-bold uppercase tracking-wider px-1.5 py-0.5 ${
-                                      leather.grade === 'Haute'
-                                        ? 'bg-[#1C1C1C] text-[#C9A96E]'
-                                        : leather.grade === 'Prestige'
-                                        ? 'text-[#C9A96E] border border-[#C9A96E]/30'
-                                        : 'text-[#9E9E9E] border border-[#E8E0D4]'
-                                    }`}>{leather.grade}</span>
-                                    <span className="text-[6px] text-[#9E9E9E]">· {leather.origin}</span>
+                                </div>
+
+                                {/* Card info */}
+                                <div className={`p-2.5 transition-colors duration-200 ${
+                                  sel ? 'bg-[#FAF7F2] border-t border-[#C9A96E]/30' : 'bg-white border-t border-[#F0EBE3] group-hover:bg-[#FAF7F2]'
+                                }`}>
+                                  <p className="text-[8px] sm:text-[9px] font-bold text-[#1C1C1C] uppercase tracking-wider leading-tight mb-0.5">
+                                    {design.label}
+                                  </p>
+                                  <p className="text-[7px] text-[#9E9E9E] font-light leading-snug mb-1.5 line-clamp-2">
+                                    {design.sub}
+                                  </p>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[6px] text-[#C9A96E] font-semibold uppercase tracking-wider">
+                                      Design Style
+                                    </span>
+                                    <span className="text-[6px] text-[#9E9E9E] font-light flex items-center gap-0.5">
+                                      <ZoomIn size={7} />
+                                      View
+                                    </span>
                                   </div>
                                 </div>
                               </motion.button>
                             );
                           })}
                         </div>
+
+                        <p className="text-[8px] text-[#9E9E9E] font-light text-center pt-1">
+                          Click any design card to view full detail and select your preferred style.
+                        </p>
                       </div>
 
-                      <SectionDivider label="Finishing Details" />
+                      {/* ══ LEATHER SELECTION ══ */}
+                      <SectionDivider label="Leather Selection" />
 
-                      {/* Hardware + Lining */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        {/* Hardware */}
-                        <div className="space-y-2.5">
-                          <label className={LABEL}>Hardware Finish</label>
-                          <div className="grid grid-cols-2 gap-2">
-                            {HARDWARE_OPTIONS.map((hw) => {
-                              const sel = formData.hardware === hw.value;
-                              return (
-                                <button
-                                  key={hw.value}
-                                  type="button"
-                                  onClick={() => update('hardware', hw.value)}
-                                  className={`flex items-center gap-2.5 p-2.5 border text-left transition-all duration-200 ${
-                                    sel
-                                      ? 'border-[#1C1C1C] bg-white'
-                                      : 'border-[#E8E0D4] bg-[#FAF7F2] hover:border-[#C9A96E]/40'
-                                  }`}
-                                >
-                                  <div
-                                    className={`w-5 h-5 rounded-full border shrink-0 ${sel ? 'border-[#1C1C1C]' : 'border-neutral-200'}`}
-                                    style={{ backgroundColor: hw.color }}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <label className={LABEL}>
+                            Hide & Grain <span className="text-[#C9A96E]">·</span>
+                          </label>
+                          <span className="text-[7px] text-[#9E9E9E] font-light flex items-center gap-1">
+                            <ZoomIn size={8} className="text-[#C9A96E]" />
+                            Tap any card to view detail
+                          </span>
+                        </div>
+
+                        {/* Selected leather banner */}
+                        <AnimatePresence>
+                          {selectedLeather && (
+                            <motion.div
+                              key={selectedLeather.value}
+                              initial={{ opacity: 0, y: -6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -6 }}
+                              transition={{ duration: 0.2 }}
+                              className="flex items-center gap-3 px-3.5 py-2.5 bg-[#1C1C1C] border border-[#1C1C1C]"
+                            >
+                              <div className="relative w-8 h-8 overflow-hidden shrink-0">
+                                <img
+                                  src={selectedLeather.image}
+                                  alt={selectedLeather.label}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-[8px] font-bold text-white uppercase tracking-[0.2em]">
+                                  {selectedLeather.label}
+                                </p>
+                                <p className="text-[7px] text-neutral-400 font-light">{selectedLeather.origin} · {selectedLeather.grade}</p>
+                              </div>
+                              <Check size={11} className="text-[#C9A96E]" strokeWidth={2.5} />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Leather grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                          {LEATHER_OPTIONS.map((leather, idx) => {
+                            const sel = formData.leather === leather.value;
+                            return (
+                              <motion.button
+                                key={leather.value}
+                                type="button"
+                                onClick={() => setLeatherPopup(leather.value)}
+                                whileTap={{ scale: 0.97 }}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                className={`relative group text-left overflow-hidden border-2 transition-all duration-200 ${
+                                  sel
+                                    ? 'border-[#C9A96E] shadow-md'
+                                    : 'border-transparent hover:border-[#C9A96E]/40'
+                                }`}
+                              >
+                                <div className="relative h-28 sm:h-32 overflow-hidden bg-neutral-200">
+                                  <img
+                                    src={leather.image}
+                                    alt={leather.label}
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                   />
-                                  <span className="text-[8px] font-semibold text-[#1C1C1C] uppercase tracking-wide leading-tight">
-                                    {hw.label}
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
+                                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                                    <div className="w-8 h-8 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                      <ZoomIn size={13} className="text-[#1C1C1C]" />
+                                    </div>
+                                  </div>
+
+                                  <AnimatePresence>
+                                    {sel && (
+                                      <motion.div
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0, opacity: 0 }}
+                                        className="absolute top-2 right-2 w-6 h-6 bg-[#C9A96E] flex items-center justify-center shadow-md"
+                                      >
+                                        <Check size={10} className="text-white" strokeWidth={3} />
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+
+                                  <div className="absolute top-2 left-2">
+                                    <span className={`text-[6px] font-bold uppercase tracking-wider px-1.5 py-0.5 ${
+                                      leather.grade === 'Haute'
+                                        ? 'bg-[#1C1C1C] text-[#C9A96E]'
+                                        : leather.grade === 'Prestige'
+                                        ? 'bg-[#C9A96E] text-white'
+                                        : leather.grade === 'Heritage'
+                                        ? 'bg-white/90 text-[#1C1C1C]'
+                                        : 'bg-white/80 text-[#6B6B6B]'
+                                    }`}>
+                                      {leather.grade}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className={`p-2.5 transition-colors duration-200 ${
+                                  sel ? 'bg-[#FAF7F2] border-t border-[#C9A96E]/30' : 'bg-white border-t border-[#F0EBE3] group-hover:bg-[#FAF7F2]'
+                                }`}>
+                                  <p className="text-[8px] sm:text-[9px] font-bold text-[#1C1C1C] uppercase tracking-wider leading-tight mb-0.5">
+                                    {leather.label}
+                                  </p>
+                                  <p className="text-[7px] text-[#9E9E9E] font-light leading-snug mb-1.5 line-clamp-2">
+                                    {leather.sub}
+                                  </p>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[6px] text-[#C9A96E] font-semibold uppercase tracking-wider">
+                                      {leather.origin}
+                                    </span>
+                                    <span className="text-[6px] text-[#9E9E9E] font-light flex items-center gap-0.5">
+                                      <ZoomIn size={7} />
+                                      View
+                                    </span>
+                                  </div>
+                                </div>
+                              </motion.button>
+                            );
+                          })}
                         </div>
 
-                        {/* Lining */}
-                        <div className="space-y-2.5">
-                          <label className={LABEL}>Interior Lining</label>
-                          <div className="grid grid-cols-2 gap-2">
-                            {LINING_OPTIONS.map((ln) => {
-                              const sel = formData.lining === ln.value;
-                              return (
-                                <button
-                                  key={ln.value}
-                                  type="button"
-                                  onClick={() => update('lining', ln.value)}
-                                  className={`py-2.5 px-3 border text-[8px] font-semibold uppercase tracking-wide text-left transition-all duration-200 ${
-                                    sel
-                                      ? 'border-[#1C1C1C] bg-white text-[#1C1C1C]'
-                                      : 'border-[#E8E0D4] bg-[#FAF7F2] text-[#9E9E9E] hover:border-[#C9A96E]/40 hover:text-[#1C1C1C]'
-                                  }`}
-                                >
-                                  {ln.label}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
+                        <p className="text-[8px] text-[#9E9E9E] font-light text-center pt-1">
+                          Click any leather card to view full detail, images, and select your hide.
+                        </p>
                       </div>
                     </motion.div>
 
-                    {/* ── STEP 3: Watch Strap Measurements (conditional) ── */}
+                    {/* ── Watch Strap Measurements ── */}
                     <AnimatePresence>
                       {isWatchStrap && (
                         <motion.div
@@ -934,7 +1432,6 @@ export default function CustomCommission() {
                               badge="Required for strap orders"
                             />
 
-                            {/* Visual guide */}
                             <div className="flex items-start gap-3 p-4 bg-[#1C1C1C]">
                               <Ruler size={14} className="text-[#C9A96E] shrink-0 mt-0.5" strokeWidth={1.5} />
                               <div className="space-y-1">
@@ -948,7 +1445,6 @@ export default function CustomCommission() {
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                              {/* Lug Width */}
                               <div>
                                 <label className={LABEL}>Lug Width <span className="text-[#C9A96E]">·</span></label>
                                 <div className="relative">
@@ -965,7 +1461,6 @@ export default function CustomCommission() {
                                 </div>
                               </div>
 
-                              {/* Wrist Size */}
                               <div>
                                 <label className={LABEL}>Wrist Circumference <span className="text-[#C9A96E]">·</span></label>
                                 <input
@@ -978,7 +1473,6 @@ export default function CustomCommission() {
                                 <FieldError msg={formErrors.wristSize} />
                               </div>
 
-                              {/* Thread Styling */}
                               <div>
                                 <label className={LABEL}>Saddle Stitch Thread</label>
                                 <div className="flex flex-col gap-1.5">
@@ -1007,7 +1501,6 @@ export default function CustomCommission() {
                               </div>
                             </div>
 
-                            {/* Watch brand field */}
                             <div>
                               <label className={LABEL}>Watch Brand & Reference (Optional)</label>
                               <input
@@ -1026,7 +1519,7 @@ export default function CustomCommission() {
                       )}
                     </AnimatePresence>
 
-                    {/* ── STEP 4 / 3: Specifications & Timeline ── */}
+                    {/* ── Specifications & Timeline ── */}
                     <motion.div
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -1040,7 +1533,6 @@ export default function CustomCommission() {
                         subtitle="Describe your vision in as much detail as possible. Our artisan will use this as the foundation for your piece."
                       />
 
-                      {/* Main textarea */}
                       <div>
                         <label className={LABEL}>
                           Detailed Requirements <span className="text-[#C9A96E]">·</span>
@@ -1052,7 +1544,7 @@ export default function CustomCommission() {
                           placeholder={
                             isWatchStrap
                               ? 'Describe your ideal strap: preferred taper (e.g. 20mm to 18mm), buckle finish, holes spacing, any special requests such as deployant clasp or quick-release spring bars...'
-                              : 'E.g., I would like a slim bifold wallet in Barenia tan with 6 card slots, a central cash pocket, no coin pocket, and a hand-burnished edge in matching tan. Interior lining in ecru natural lambskin...'
+                              : 'E.g., I would like a slim bifold wallet in Barenia tan with 6 card slots, a central cash pocket, no coin pocket, and a hand-burnished edge in matching tan...'
                           }
                           className={`${INPUT_BASE} resize-none font-light ${formErrors.specifications ? INPUT_ERR : INPUT_OK}`}
                         />
@@ -1066,7 +1558,6 @@ export default function CustomCommission() {
 
                       <SectionDivider label="Additional Options" />
 
-                      {/* Timeline + Budget row */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         {/* Timeline */}
                         <div className="space-y-2">
@@ -1145,7 +1636,7 @@ export default function CustomCommission() {
                         </div>
                       </div>
 
-                      {/* Important notice */}
+                      {/* Bespoke terms notice */}
                       <div className="flex items-start gap-3.5 p-4 bg-[#1C1C1C] mt-2">
                         <ShieldCheck size={14} className="text-[#C9A96E] shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div className="space-y-1">
@@ -1161,7 +1652,7 @@ export default function CustomCommission() {
                         </div>
                       </div>
 
-                      {/* Submit row */}
+                      {/* Submit row — WhatsApp */}
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
                         <motion.button
                           type="submit"
@@ -1169,8 +1660,8 @@ export default function CustomCommission() {
                           whileTap={!isSubmitting ? { scale: 0.98 } : {}}
                           className={`flex-1 sm:flex-none sm:px-10 py-4 text-[9px] sm:text-[10px] tracking-[0.25em] font-bold uppercase transition-all duration-300 flex items-center justify-center gap-2.5 ${
                             isSubmitting
-                              ? 'bg-[#C9A96E] text-white cursor-wait'
-                              : 'bg-[#1C1C1C] hover:bg-[#C9A96E] text-white group'
+                              ? 'bg-[#25D366] text-white cursor-wait'
+                              : 'bg-[#1C1C1C] hover:bg-[#25D366] text-white group'
                           }`}
                         >
                           {isSubmitting ? (
@@ -1180,24 +1671,22 @@ export default function CustomCommission() {
                                 transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
                                 className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full"
                               />
-                              <span>Registering Commission...</span>
+                              <span>Opening WhatsApp...</span>
                             </>
                           ) : (
                             <>
-                              <span>Submit Commission Inquiry</span>
+                              <MessageCircle size={13} />
+                              <span>Send Inquiry via WhatsApp</span>
                               <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform duration-200" />
                             </>
                           )}
                         </motion.button>
 
                         <div className="flex items-center gap-2">
-                          <ShieldCheck size={11} className="text-[#C9A96E] shrink-0" strokeWidth={1.5} />
+                          <MessageCircle size={11} className="text-[#25D366] shrink-0" strokeWidth={1.5} />
                           <p className="text-[7px] sm:text-[8px] text-[#9E9E9E] font-light leading-relaxed">
-                            Encrypted & secure. By submitting you agree to our{' '}
-                            <button type="button" className="underline hover:text-[#1C1C1C] transition-colors">
-                              bespoke commission terms
-                            </button>
-                            .
+                            Your commission details will open in WhatsApp chat with our atelier
+                            (<span className="font-semibold text-[#1C1C1C]">075 636 4542</span>) for instant response.
                           </p>
                         </div>
                       </div>
@@ -1214,16 +1703,15 @@ export default function CustomCommission() {
                   transition={{ duration: 0.45, ease: 'easeOut' }}
                   className="bg-white border border-[#E8E0D4] overflow-hidden"
                 >
-                  {/* Success header band */}
                   <div className="bg-[#1C1C1C] px-6 sm:px-10 py-6 sm:py-8">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', damping: 14, stiffness: 200, delay: 0.1 }}
-                        className="w-12 h-12 sm:w-14 sm:h-14 bg-[#C9A96E]/10 border border-[#C9A96E]/30 flex items-center justify-center shrink-0"
+                        className="w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-center shrink-0"
                       >
-                        <Check size={22} className="text-[#C9A96E]" strokeWidth={1.5} />
+                        <MessageCircle size={22} className="text-[#25D366]" strokeWidth={1.5} />
                       </motion.div>
                       <div>
                         <motion.p
@@ -1232,7 +1720,7 @@ export default function CustomCommission() {
                           transition={{ delay: 0.2 }}
                           className="text-[8px] sm:text-[9px] tracking-[0.35em] text-[#C9A96E] font-bold uppercase mb-1"
                         >
-                          Commission Successfully Registered
+                          Inquiry Sent via WhatsApp
                         </motion.p>
                         <motion.h3
                           initial={{ opacity: 0, y: 8 }}
@@ -1249,15 +1737,22 @@ export default function CustomCommission() {
                           className="text-[9px] sm:text-[10px] text-neutral-400 font-light mt-1"
                         >
                           Hello <span className="text-white font-medium">{formData.name}</span> — your
-                          request has been securely submitted to the Unique Tanery crafting registry.
+                          commission details have been opened in WhatsApp. If the chat did not open,{' '}
+                          <button
+                            onClick={() => {
+                              const message = buildWhatsAppMessage(commissionId);
+                              window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+                            }}
+                            className="text-[#25D366] underline font-medium"
+                          >
+                            click here to resend
+                          </button>.
                         </motion.p>
                       </div>
                     </div>
                   </div>
 
                   <div className="p-5 sm:p-8 lg:p-10 space-y-6">
-
-                    {/* Commission summary table */}
                     <motion.div
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -1275,17 +1770,17 @@ export default function CustomCommission() {
                           { label: 'Client', value: formData.name },
                           { label: 'Contact', value: formData.email },
                           { label: 'Product', value: selectedCategory?.label ?? formData.category },
+                          { label: 'Design Style', value: selectedDesign?.label ?? formData.design },
                           { label: 'Leather', value: selectedLeather?.label ?? formData.leather },
-                          { label: 'Hardware', value: HARDWARE_OPTIONS.find(h => h.value === formData.hardware)?.label ?? formData.hardware },
                           { label: 'Timeline', value: TIMELINE_OPTIONS.find(t => t.value === formData.timeline)?.label + ' — ' + TIMELINE_OPTIONS.find(t => t.value === formData.timeline)?.detail },
-                          { label: 'Status', value: 'Queued for Artisan Review', accent: true },
+                          { label: 'Status', value: 'Sent to WhatsApp — Awaiting Reply', accent: true },
                         ].map(({ label, value, highlight, accent }) => (
                           <div key={label} className="flex items-center justify-between px-4 py-3">
                             <span className="text-[8px] sm:text-[9px] text-[#9E9E9E] uppercase tracking-wider font-mono shrink-0">
                               {label}
                             </span>
                             <span className={`text-[8px] sm:text-[9px] font-mono text-right max-w-[55%] truncate ${
-                              accent ? 'text-[#C9A96E] font-bold uppercase tracking-wider'
+                              accent ? 'text-[#25D366] font-bold uppercase tracking-wider'
                               : highlight ? 'font-bold text-[#1C1C1C] tracking-wider'
                               : 'text-[#6B6B6B]'
                             }`}>
@@ -1296,7 +1791,6 @@ export default function CustomCommission() {
                       </div>
                     </motion.div>
 
-                    {/* What happens next */}
                     <motion.div
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -1328,7 +1822,6 @@ export default function CustomCommission() {
                       })}
                     </motion.div>
 
-                    {/* Rating + Reset */}
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -1362,6 +1855,42 @@ export default function CustomCommission() {
           </div>
         </div>
       </div>
+
+      {/* ══ DESIGN POPUP ═════════════════════════════════════════════════════ */}
+      <AnimatePresence>
+        {designPopup && popupDesign && (
+          <DetailPopup
+            title={popupDesign.label}
+            sub={popupDesign.sub}
+            grade={popupDesign.grade}
+            images={[popupDesign.image]}
+            description={popupDesign.description}
+            characteristics={popupDesign.characteristics}
+            onClose={() => setDesignPopup(null)}
+            onSelect={() => update('design', popupDesign.value)}
+            isSelected={formData.design === popupDesign.value}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ══ LEATHER POPUP ════════════════════════════════════════════════════ */}
+      <AnimatePresence>
+        {leatherPopup && popupLeather && (
+          <DetailPopup
+            title={popupLeather.label}
+            sub={popupLeather.sub}
+            grade={popupLeather.grade}
+            origin={popupLeather.origin}
+            images={popupLeather.popupImages}
+            description={popupLeather.description}
+            characteristics={popupLeather.characteristics}
+            swatchColor={popupLeather.color}
+            onClose={() => setLeatherPopup(null)}
+            onSelect={() => update('leather', popupLeather.value)}
+            isSelected={formData.leather === popupLeather.value}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
