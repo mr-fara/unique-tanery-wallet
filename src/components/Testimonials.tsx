@@ -12,10 +12,10 @@ import {
 // ═══════════════════════════════════════════
 
 const TRUST_METRICS = [
-  { icon: Star,     value: 4.9,   suffix: '/5', label: 'Average Rating',   decimals: 1 },
-  { icon: Users,    value: 12000, suffix: '+',  label: 'Happy Customers',  decimals: 0 },
-  { icon: MapPin,   value: 28,    suffix: '+',  label: 'Countries Served', decimals: 0 },
-  { icon: ThumbsUp, value: 98,    suffix: '%',  label: 'Recommend Us',     decimals: 0 },
+  { icon: Star,     value: 5,   suffix: '/5', label: 'Average Rating',   decimals: 1 },
+  { icon: Users,    value: 1000, suffix: '+',  label: 'Happy Customers',  decimals: 0 },
+  { icon: MapPin,   value: 17,    suffix: '+',  label: 'Countries Served', decimals: 0 },
+  { icon: ThumbsUp, value: 100,    suffix: '%',  label: 'Recommend Us',     decimals: 0 },
 ];
 
 const TESTIMONIALS = [

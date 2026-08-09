@@ -289,9 +289,9 @@ export default function Hero({ onExploreClick, onAtelierClick }: HeroProps) {
               className="hidden sm:grid grid-cols-3 divide-x divide-stone-200 border border-stone-200 bg-white mt-0 border-t-0"
             >
               {[
-                { value: '12+', label: 'Years of Craft' },
+                { value: '3+', label: 'Years of Craft' },
                 { value: '100%', label: 'Hand-made' },
-                { value: '50+', label: 'Countries Shipped' },
+                { value: '17+', label: 'Countries Shipped' },
               ].map(({ value, label }) => (
                 <div
                   key={label}
