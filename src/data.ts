@@ -12,6 +12,237 @@ export const FALLBACK_IMAGE =
 // ──────────────────────────────────────────────────────────
 export const PRODUCTS: Product[] = [
   {
+    id: 'tany-natural-python-bifold',
+    name: 'Naga Natural Python Bifold',
+    category: 'wallets',
+    price: 690,
+    leatherType: 'Genuine Python Skin (Natural Undyed)',
+    description:
+      'A striking bifold wallet crafted from a single panel of natural-finish python skin, showcasing raw ivory-and-charcoal scale patterns with deep navy saddle stitching along the perimeter.',
+    story:
+      'Each python hide is hand-selected for the symmetry of its dorsal scales. We preserve the skin in its natural undyed state, allowing the organic gradient from cream to graphite to remain untouched. The wallet is bench-stitched over 18 hours by a single artisan and lined with soft calfskin to protect the delicate scale texture.',
+    dimensions: 'H 3.7" x W 4.5" x D 0.5" (closed)',
+    imageUrl:
+      '/image/mens_collections/img9.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img9.1.jpg',
+      '/image/mens_collections/img9.2.jpg',
+      '/image/mens_collections/img9.3.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    isBestseller: true,
+  },
+  {
+    id: 'tany-crimson-python-cardholder',
+    name: 'Rubis Python Vertical Cardholder',
+    category: 'wallets',
+    price: 520,
+    leatherType: 'Hand-Dyed Python Skin',
+    description:
+      'A tall, portrait-oriented cardholder featuring hand-brushed crimson python with dramatic tonal shading from oxblood to sunset red. Slim silhouette designed for the front pocket.',
+    story:
+      'The dye is applied by hand in three progressive passes, allowing the natural relief of each scale to catch pigment differently. The result is a wallet that shifts from deep wine at the edges to vivid flame red at the crown of the scales — no two pieces alike.',
+    dimensions: 'H 4.3" x W 3.1" x D 0.4" (closed)',
+    imageUrl:
+      '/image/mens_collections/img10.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img10.1.jpg',
+      '/image/mens_collections/img10.2.jpg',
+      '/image/mens_collections/img10. 3.jpg',
+ 
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    isBestseller: false,
+  },
+  {
+    id: 'tany-croco-emboss-bifold',
+    name: 'Croco Emboss Bifold Wallet',
+    category: 'wallets',
+    price: 340,
+    leatherType: 'Croco-Embossed Full-Grain Calfskin',
+    description:
+      'A refined bifold constructed from Italian calfskin, deep-pressed with an authentic Nile crocodile grain pattern. Warm chestnut tone with tonal saddle stitching and burnished edges.',
+    story:
+      'For clients who desire the sculptural elegance of crocodile without the exotic sourcing, this wallet uses a heritage press-embossing technique perfected in a Tuscan tannery since 1923. The full-grain calf underneath ages naturally, deepening the embossed relief over years of use.',
+    dimensions: 'H 4.3" x W 3.5" x D 0.5" (closed)',
+    imageUrl:
+      '/image/mens_collections/img11.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img11.1.jpg',
+      '/image/mens_collections/img11.2.jpg',
+      '/image/mens_collections/img11.3.jpg',
+    
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    isBestseller: true,
+  },
+  {
+    id: 'tany-heritage-pullup-bifold',
+    name: 'Heritage Pull-Up Bifold',
+    category: 'wallets',
+    price: 280,
+    leatherType: 'Waxed Pull-Up Bison Leather',
+    description:
+      'A minimalist bifold wallet in richly waxed pull-up leather that develops a magnificent marbled patina with every use. Soft to the touch, structured in silhouette.',
+    story:
+      'Pull-up leather is drum-dyed and heavily saturated with natural oils and beeswax. When flexed, the fibers separate and reveal a lighter honey tone beneath — a living, breathing surface that tells the story of its owner. This wallet is intentionally kept minimal so the leather remains the hero.',
+    dimensions: 'H 4.3" x W 3.7" x D 0.5" (closed)',
+    imageUrl:
+      '/image/mens_collections/img12.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img12.1.jpg',
+      '/image/mens_collections/img12.2.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    isBestseller: true,
+  },
+  {
+    id: 'tany-oxblood-ostrich-bifold',
+    name: 'Oxblood Ostrich Bifold',
+    category: 'wallets',
+    price: 780,
+    leatherType: 'Genuine South African Ostrich Leather',
+    description:
+      'A distinguished bifold in deep oxblood ostrich, distinguished by its unmistakable quill-follicle pattern and dual-tone hand-brushed finish from burgundy to near-black.',
+    story:
+      'Only the crown of the ostrich hide — where the follicles are most prominent — is used for our wallets. The leather is finished with an antique dye technique that pools darker in the recessed quill marks, creating a three-dimensional sense of depth.',
+    dimensions: 'H 3.7" x W 4.5" x D 0.5" (closed)',
+    imageUrl:
+      '/image/mens_collections/img8.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img8.1.jpg',
+      '/image/mens_collections/img8.2.jpg',
+      '/image/mens_collections/img8.3.jpg',
+      '/image/mens_collections/img8.4.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    isBestseller: false,
+  },
+  {
+    id: 'tany-envelope-snap-cardholder',
+    name: 'Envelope Snap Cardholder',
+    category: 'wallets',
+    price: 220,
+    leatherType: 'Vintage Waxed Pull-Up Leather',
+    description:
+      'A slim envelope-style cardholder with an asymmetric diagonal flap secured by a solid brass press-stud. Holds up to 6 cards and folded notes.',
+    story:
+      'Inspired by 1940s correspondence pouches, the flap opens diagonally to reveal cascading card slots. The single brass stud is hand-set with an antique aged finish that harmonises with the warm caramel leather.',
+    dimensions: 'H 4.1" x W 2.9" x D 0.4"',
+    imageUrl:
+      '/image/mens_collections/img7.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img7.1.jpg',
+      '/image/mens_collections/img7.2.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    hardwareOptions: ['Antique Brass', 'Polished Nickel'],
+    isBestseller: false,
+  },
+  {
+    id: 'tany-continental-travel-wallet',
+    name: 'Continental Long Travel Wallet',
+    category: 'wallets',
+    price: 590,
+    leatherType: 'Vegetable-Tanned Bridle Leather',
+    description:
+      'A generous long-format wallet designed for the international traveller. Features multiple card slots, dual bill compartments, a zippered coin pouch, and a passport sleeve.',
+    story:
+      'Cut from a single shoulder of English bridle leather and folded — never seamed — along the spine. The interior is finished in a deep espresso hue that contrasts subtly with the exterior. Every fold and cavity is hand-pressed to lie flat when empty.',
+    dimensions: 'H 4.1" x W 8.0" x D 0.7" (closed)',
+    imageUrl:
+      '/image/mens_collections/img6.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img6.1.jpg',
+      '/image/mens_collections/img6.2.jpg',
+      '/image/mens_collections/img6.3.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    isBestseller: false,
+  },
+  {
+    id: 'tany-clipper-long-wallet',
+    name: 'Clipper Dual-Snap Long Wallet',
+    category: 'wallets',
+    price: 640,
+    leatherType: 'Full-Grain Waxed Cowhide',
+    description:
+      'An elongated continental wallet secured by two solid brass press-studs. Ideal for those who carry many cards, currencies, and receipts without bulk.',
+    story:
+      'The double-snap closure was borrowed from aviator navigation folios of the 1930s. Each stud is engraved on the reverse with our maker\'s mark. The waxed cowhide arrives deeply saturated in dark chocolate and will soften with body heat into a personal fit.',
+    dimensions: 'H 4.0" x W 8.3" x D 0.8" (closed)',
+    imageUrl:
+      '/image/mens_collections/img5.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img5.1.jpg',
+      '/image/mens_collections/img5.2.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
+    hardwareOptions: ['Solid Brushed Brass', 'Antique Bronze'],
+    isBestseller: true,
+  },
+  {
+    id: 'tany-compact-coin-trifold',
+    name: 'Compact Trifold Coin Purse',
+    category: 'wallets',
+    price: 240,
+    leatherType: 'Waxed Pull-Up Bison Leather',
+    description:
+      'A pocketable trifold coin purse in warm honey pull-up leather with striking contrast black hand stitching and a solid brass button closure.',
+    story:
+      'A modern reinterpretation of the traditional shepherd\'s coin purse. Opens into three compartments — one for coins, one for bills folded in thirds, and a slim card sleeve. The contrast black waxed linen thread is a signature Tany atelier detail.',
+    dimensions: 'H 3.0" x W 4.2" x D 0.6" (closed)',
+    imageUrl:
+      '/image/mens_collections/img4.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img4.1.jpg',
+      '/image/mens_collections/img4.2.jpg',
+      '/image/mens_collections/img4.3.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Contrasting Black Thread', 'Matching Tonal Thread'],
+    hardwareOptions: ['Antique Brass', 'Polished Nickel'],
+    isBestseller: false,
+  },
+  {
+    id: 'tany-emerald-python-bifold',
+    name: 'Émeraude Python Bifold',
+    category: 'wallets',
+    price: 720,
+    leatherType: 'Hand-Dyed Python Skin (Emerald)',
+    description:
+      'A jewel of a wallet in vivid emerald-green python, hand-dyed to bring out the natural depth of each scale. Contrasting black saddle stitching frames the perimeter.',
+    story:
+      'The emerald tone is achieved through a proprietary indigo-and-copper mordant process that penetrates the scale keratin rather than simply coating it. The result is a colour that appears to shift from deep forest to Caribbean turquoise depending on the light.',
+    dimensions: 'H 3.7" x W 4.5" x D 0.5" (closed)',
+    imageUrl:
+      '/image/mens_collections/img3.jpg',
+    secondaryImages: [
+      '/image/mens_collections/img3.1.jpg',
+      '/image/mens_collections/img3.2.jpg',
+      '/image/mens_collections/img3.3.jpg',
+      
+    ],
+    customizable: true,
+    stitchingOptions: ['Contrasting Black Thread', 'Matching Tonal Thread'],
+    isBestseller: true,
+  },
+  {
     id: 'tany-atelier-handbag',
     name: 'The Atelier Handbag',
     category: 'bags',
@@ -22,35 +253,14 @@ export const PRODUCTS: Product[] = [
     story:
       'Inspired by the equestrian saddlebags of the French countryside, this handbag represents 40 hours of meticulous hand-stitching. The leather is sourced from a historic family-run tannery in Alsace, treated with natural oils to develop a rich, personal patina over a lifetime.',
     dimensions: 'H 8.5" x W 11" x D 4.5"',
-    colors: [
-      {
-        name: 'Noir (Black)',
-        hex: '#1a1a1a',
-        imageUrl:
-          'https://i.pinimg.com/736x/47/5b/ed/475bed595da5fe9802fcf2f3bacabb3c.jpg',
-        desc: 'Sleek, deep black dyed-through box calfskin with a subtle semi-gloss luster.',
-      },
-      {
-        name: 'Gold (Tan)',
-        hex: '#a67246',
-        imageUrl:
-          'https://i.pinimg.com/736x/9d/8f/13/9d8f137959ec2e443a1a953900ffa6d4.jpg',
-        desc: 'Warm amber-caramel tan, the classic color of luxury saddle-craft.',
-      },
-      {
-        name: 'Rouge Sellier',
-        hex: '#63251e',
-        imageUrl:
-          'https://i.pinimg.com/736x/0a/34/c3/0a34c32d527f5683c0726bcc7ee743e8.jpg',
-        desc: 'A rich, deep burgundy with chocolate undertones.',
-      },
-      {
-        name: 'Vert Olive',
-        hex: '#4d5c41',
-        imageUrl:
-          'https://i.pinimg.com/736x/1b/82/3c/1b823cb4d2e913667a0cd6ca6ea82747.jpg',
-        desc: 'A sophisticated mossy green with warm earth tones.',
-      },
+    imageUrl:
+      'https://i.pinimg.com/736x/47/5b/ed/475bed595da5fe9802fcf2f3bacabb3c.jpg',
+    secondaryImages: [
+      'https://i.pinimg.com/736x/9d/8f/13/9d8f137959ec2e443a1a953900ffa6d4.jpg',
+      'https://i.pinimg.com/736x/0a/34/c3/0a34c32d527f5683c0726bcc7ee743e8.jpg',
+      'https://i.pinimg.com/736x/1b/82/3c/1b823cb4d2e913667a0cd6ca6ea82747.jpg',
+      'https://i.pinimg.com/736x/4a/2b/7c/4a2b7c8f1e3d9a5b6c2e4f8d1a3b5c7e.jpg',
+      'https://i.pinimg.com/736x/3f/5d/8e/3f5d8e2a1b4c7d9e6f2a3b5c8d1e4f7a.jpg',
     ],
     customizable: true,
     stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
@@ -72,28 +282,14 @@ export const PRODUCTS: Product[] = [
     story:
       'Barenia leather is legendary for its raw elegance. It is double-tanned in chrome and bark, then soaked in a bath of six different oils. This process ensures the leather is resistant to scratches; minor scuffs can be buffed out with a simple swipe of a finger, making this wallet an heirloom piece that develops a magnificent patina.',
     dimensions: 'H 3.6" x W 4.5" x D 0.4" (closed)',
-    colors: [
-      {
-        name: 'Gold (Tan)',
-        hex: '#a67246',
-        imageUrl:
-          'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&q=80&w=1000',
-        desc: 'Natural gold tan, showcasing the authentic grain and character of Barenia.',
-      },
-      {
-        name: 'Ébène (Dark Brown)',
-        hex: '#3d2516',
-        imageUrl:
-          'https://i.pinimg.com/736x/95/eb/08/95eb082ed6fd755c2fdbed0b167556c3.jpg',
-        desc: 'A rich espresso tone, deep and highly sophisticated.',
-      },
-      {
-        name: 'Bleu Saphir',
-        hex: '#1d2a45',
-        imageUrl:
-          'https://i.pinimg.com/736x/6f/44/66/6f4466940370804c49cfa8dd4e7acc09.jpg',
-        desc: 'A midnight navy blue that reflects light beautifully.',
-      },
+    imageUrl:
+      'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&q=80&w=1000',
+    secondaryImages: [
+      'https://i.pinimg.com/736x/95/eb/08/95eb082ed6fd755c2fdbed0b167556c3.jpg',
+      'https://i.pinimg.com/736x/6f/44/66/6f4466940370804c49cfa8dd4e7acc09.jpg',
+      'https://i.pinimg.com/736x/2a/4b/8c/2a4b8c1d3e5f7a9b2c4d6e8f1a3b5c7d.jpg',
+      'https://i.pinimg.com/736x/5e/7f/9a/5e7f9a1b3c5d7e9f2a4b6c8d1e3f5a7b.jpg',
+      'https://i.pinimg.com/736x/8b/1c/3d/8b1c3d5e7f9a2b4c6d8e1f3a5b7c9d2e.jpg',
     ],
     customizable: true,
     stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
@@ -111,28 +307,14 @@ export const PRODUCTS: Product[] = [
       'Each scale of our alligator leather is hand-glazed and selected for symmetrical patterns. We employ the historical "saddle-stitch" which uses two needles on a single piece of thread, ensuring that even if one loop wears down, the rest of the stitching remains fully intact.',
     dimensions:
       'Lengths: 115mm / 75mm | Widths available: 18mm, 19mm, 20mm, 21mm, 22mm',
-    colors: [
-      {
-        name: 'Ebene Brown',
-        hex: '#543b2b',
-        imageUrl:
-          'https://i.pinimg.com/1200x/9d/5f/ed/9d5fedc2cf882852f2143373af569b32.jpg',
-        desc: 'Warm mahogany alligator skin with hand-painted dark brown edges.',
-      },
-      {
-        name: 'Noir Éclat',
-        hex: '#111111',
-        imageUrl:
-          'https://i.pinimg.com/1200x/76/1e/20/761e204742c9470b06859f88aceb82a7.jpg',
-        desc: 'Lustrous, deep matte black with sharp tonal hand-stitching.',
-      },
-      {
-        name: 'Cognac Gold',
-        hex: '#be814e',
-        imageUrl:
-          'https://i.pinimg.com/1200x/3c/ad/48/3cad48f7247e5c5b45778f5a37db72ef.jpg',
-        desc: 'Bright, vibrant cognac honey color highlighting the rich scale texture.',
-      },
+    imageUrl:
+      'https://i.pinimg.com/1200x/9d/5f/ed/9d5fedc2cf882852f2143373af569b32.jpg',
+    secondaryImages: [
+      'https://i.pinimg.com/1200x/76/1e/20/761e204742c9470b06859f88aceb82a7.jpg',
+      'https://i.pinimg.com/1200x/3c/ad/48/3cad48f7247e5c5b45778f5a37db72ef.jpg',
+      'https://i.pinimg.com/736x/1c/3d/5e/1c3d5e7f9a2b4c6d8e1f3a5b7c9d2e4f.jpg',
+      'https://i.pinimg.com/736x/4f/6a/8b/4f6a8b1c3d5e7f9a2b4c6d8e1f3a5b7c.jpg',
+      'https://i.pinimg.com/736x/7a/9b/2c/7a9b2c4d6e8f1a3b5c7d9e2f4a6b8c1d.jpg',
     ],
     sizes: [
       '18mm Lug Width',
@@ -160,28 +342,14 @@ export const PRODUCTS: Product[] = [
     story:
       'Epsom leather is highly appreciated for its rigid, scratch-resistant embossed surface. It holds its vibrant dye colors with unmatched intensity and easily resists water spots. This gift set can be hot-stamped with personalized initials in 24k gold leaf, silver leaf, or blind debossed.',
     dimensions: 'Cardholder: H 2.9" x W 4.1" | Key Fob: L 4.2"',
-    colors: [
-      {
-        name: 'Signature Gold',
-        hex: '#be814e',
-        imageUrl:
-          'https://i.pinimg.com/1200x/d6/67/bd/d667bdb3eee784b778b9a949cb73d581.jpg',
-        desc: 'Bright marigold tan with a beautiful cross-grain Epsom texture.',
-      },
-      {
-        name: 'Tanery Orange',
-        hex: '#d9531e',
-        imageUrl:
-          'https://i.pinimg.com/736x/e9/64/ab/e964ab319f0af4a02e86a3884b298f34.jpg',
-        desc: 'A vibrant, spirited orange that radiates luxury and character.',
-      },
-      {
-        name: 'Bleu Indigo',
-        hex: '#181e2b',
-        imageUrl:
-          'https://i.pinimg.com/736x/dc/d1/94/dcd1946f28acceb6b126051002a6e3d5.jpg',
-        desc: 'An almost-black deep indigo blue that is understated and modern.',
-      },
+    imageUrl:
+      'https://i.pinimg.com/1200x/d6/67/bd/d667bdb3eee784b778b9a949cb73d581.jpg',
+    secondaryImages: [
+      'https://i.pinimg.com/736x/e9/64/ab/e964ab319f0af4a02e86a3884b298f34.jpg',
+      'https://i.pinimg.com/736x/dc/d1/94/dcd1946f28acceb6b126051002a6e3d5.jpg',
+      'https://i.pinimg.com/736x/3b/5c/7d/3b5c7d9e1f3a5b7c9d2e4f6a8b1c3d5e.jpg',
+      'https://i.pinimg.com/736x/6d/8e/1f/6d8e1f3a5b7c9d2e4f6a8b1c3d5e7f9a.jpg',
+      'https://i.pinimg.com/736x/9f/2a/4b/9f2a4b6c8d1e3f5a7b9c2d4e6f8a1b3c.jpg',
     ],
     customizable: true,
     stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
@@ -198,28 +366,14 @@ export const PRODUCTS: Product[] = [
     story:
       'Togo leather is a naturally drummed, supple calfskin with a beautiful pebbled grain. It is incredibly soft to the touch but holds its slouchy structured shape. The interior is lined with matching fine lambskin for an ultra-premium sensory experience.',
     dimensions: 'H 6.2" x W 9.5" x D 1.0"',
-    colors: [
-      {
-        name: 'Taupe Grise',
-        hex: '#8b8478',
-        imageUrl:
-          'https://i.pinimg.com/1200x/37/93/37/379337d30ebdcdcaa010779533741187.jpg',
-        desc: 'An elegant warm grey-beige, extremely versatile and classic.',
-      },
-      {
-        name: 'Noir (Black)',
-        hex: '#1a1a1a',
-        imageUrl:
-          'https://i.pinimg.com/1200x/92/1d/50/921d50f4ce622fd69bd2c16a9840e662.jpg',
-        desc: 'Pebbled black Togo leather with silver palladium accents.',
-      },
-      {
-        name: 'Rose Azalée',
-        hex: '#d9788e',
-        imageUrl:
-          'https://i.pinimg.com/736x/69/e0/f4/69e0f4c736e8cdeeaa101ae999ec7f1e.jpg',
-        desc: 'A vibrant, romantic soft raspberry pink.',
-      },
+    imageUrl:
+      'https://i.pinimg.com/1200x/37/93/37/379337d30ebdcdcaa010779533741187.jpg',
+    secondaryImages: [
+      'https://i.pinimg.com/1200x/92/1d/50/921d50f4ce622fd69bd2c16a9840e662.jpg',
+      'https://i.pinimg.com/736x/69/e0/f4/69e0f4c736e8cdeeaa101ae999ec7f1e.jpg',
+      'https://i.pinimg.com/736x/2c/4d/6e/2c4d6e8f1a3b5c7d9e2f4a6b8c1d3e5f.jpg',
+      'https://i.pinimg.com/736x/5f/7a/9b/5f7a9b2c4d6e8f1a3b5c7d9e2f4a6b8c.jpg',
+      'https://i.pinimg.com/736x/8a/1b/3c/8a1b3c5d7e9f2a4b6c8d1e3f5a7b9c2d.jpg',
     ],
     customizable: true,
     stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],
@@ -240,28 +394,14 @@ export const PRODUCTS: Product[] = [
     story:
       'Chevre leather is made from mountain goats, which naturally produces an exceptionally durable, scratch-resistant grain that is lighter and stronger than cowhide. The edges are heated and polished with beeswax 5 times to form a flawless edge that develops a beautiful patina over years of use.',
     dimensions: 'H 2.7" x W 3.9" x D 0.15"',
-    colors: [
-      {
-        name: 'Bleu Nuit',
-        hex: '#1e2433',
-        imageUrl:
-          'https://i.pinimg.com/1200x/6d/48/be/6d48be1f75faa79b4b351d60ba305226.jpg',
-        desc: 'An incredibly rich, deep night blue goatskin with subtle luster.',
-      },
-      {
-        name: 'Vert Cyprès',
-        hex: '#233827',
-        imageUrl:
-          'https://i.pinimg.com/736x/27/e2/da/27e2dab341e584d678ef782d16e2b669.jpg',
-        desc: 'A deep, mysterious forest-cypress green.',
-      },
-      {
-        name: 'Gold (Tan)',
-        hex: '#a67246',
-        imageUrl:
-          'https://i.pinimg.com/736x/48/ba/f7/48baf78aee0abb04f8127ef7a7316a40.jpg',
-        desc: 'Hand-finished honey tan showing the natural pebbled chevre grain.',
-      },
+    imageUrl:
+      'https://i.pinimg.com/1200x/6d/48/be/6d48be1f75faa79b4b351d60ba305226.jpg',
+    secondaryImages: [
+      'https://i.pinimg.com/736x/27/e2/da/27e2dab341e584d678ef782d16e2b669.jpg',
+      'https://i.pinimg.com/736x/48/ba/f7/48baf78aee0abb04f8127ef7a7316a40.jpg',
+      'https://i.pinimg.com/736x/1a/3b/5c/1a3b5c7d9e2f4a6b8c1d3e5f7a9b2c4d.jpg',
+      'https://i.pinimg.com/736x/4d/6e/8f/4d6e8f1a3b5c7d9e2f4a6b8c1d3e5f7a.jpg',
+      'https://i.pinimg.com/736x/7e/9f/2a/7e9f2a4b6c8d1e3f5a7b9c2d4e6f8a1b.jpg',
     ],
     customizable: true,
     stitchingOptions: ['Matching Tonal Thread', 'Contrasting Ecru Linen Thread'],

@@ -1,113 +1,112 @@
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { Heart, ArrowUpRight } from 'lucide-react';
-import { motion } from 'motion/react';
-import { Product, ProductColor } from '../types';
+import { motion, AnimatePresence } from 'motion/react';
+import { Product } from '../types';
 
 interface ProductCardProps {
   product: Product;
-  onViewDetail: (product: Product, initialColor: ProductColor) => void;
+  onViewDetail: (product: Product) => void;
   onToggleWishlist: (productId: string) => void;
   isWishlisted: boolean;
 }
 
-export default function ProductCard({
+const ProductCard = memo(function ProductCard({
   product,
   onViewDetail,
   onToggleWishlist,
   isWishlisted,
 }: ProductCardProps) {
-  const [selectedColor, setSelectedColor] = useState<ProductColor>(product.colors[0]);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Helper to generate custom CSS filters dynamically to simulate gorgeous leather dyes
-  // We use different hue-rotates, sepia, and saturations based on the color hex code to make the single image change color!
-  const getFilterStyle = (hex: string) => {
-    switch (hex.toLowerCase()) {
-      case '#1a1a1a': // Black
-        return 'brightness-[0.45] contrast-[1.2] grayscale';
-      case '#3d2516': // Ebene / Dark Brown
-        return 'sepia-[0.7] saturate-[1.1] brightness-[0.5] contrast-[1.15]';
-      case '#63251e': // Rouge Sellier / Burgundy
-        return 'sepia-[0.8] saturate-[1.8] hue-rotate-[320deg] brightness-[0.5] contrast-[1.2]';
-      case '#4d5c41': // Vert Olive
-        return 'sepia-[0.7] saturate-[1.2] hue-rotate-[65deg] brightness-[0.6] contrast-[1.1]';
-      case '#1d2a45': // Blue Saphir
-        return 'sepia-[0.4] saturate-[1.5] hue-rotate-[195deg] brightness-[0.5] contrast-[1.2]';
-      case '#be814e': // Cognac / Gold
-        return 'sepia-[0.2] saturate-[1.3] brightness-[1.0] contrast-[1.0]';
-      case '#d9531e': // Hermes Orange
-        return 'sepia-[0.2] saturate-[2.1] hue-rotate-[350deg] brightness-[0.95] contrast-[1.05]';
-      case '#181e2b': // Indigo Blue
-        return 'sepia-[0.4] saturate-[1.6] hue-rotate-[205deg] brightness-[0.4] contrast-[1.2]';
-      case '#8b8478': // Taupe Grise
-        return 'sepia-[0.3] saturate-[0.5] brightness-[0.8] contrast-[1.0]';
-      case '#d9788e': // Rose Azalee
-        return 'sepia-[0.2] saturate-[2.0] hue-rotate-[315deg] brightness-[0.9] contrast-[1.05]';
-      case '#1e2433': // Bleu Nuit
-        return 'sepia-[0.4] saturate-[1.5] hue-rotate-[195deg] brightness-[0.45] contrast-[1.15]';
-      case '#233827': // Vert Cypres
-        return 'sepia-[0.7] saturate-[1.3] hue-rotate-[100deg] brightness-[0.45] contrast-[1.15]';
-      default:
-        return '';
-    }
-  };
+  const allImages = [product.imageUrl, ...product.secondaryImages];
+  const activeImage = allImages[activeImageIndex];
+
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+  const handleViewDetail = useCallback(() => onViewDetail(product), [onViewDetail, product]);
+  const handleWishlist = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onToggleWishlist(product.id);
+    },
+    [onToggleWishlist, product.id]
+  );
 
   return (
-    <motion.div
-      layout
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="group relative flex flex-col justify-between bg-white border border-luxury-sand p-4 transition-all duration-500 hover:shadow-xl hover:border-luxury-gold/50 text-left h-full"
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="group relative flex flex-col justify-between bg-white border border-luxury-sand p-4 transition-shadow duration-300 hover:shadow-xl hover:border-luxury-gold/50 text-left h-full"
     >
-      {/* Product Image Section (Clean Hermes Style) */}
-      <div className="relative aspect-square w-full overflow-hidden bg-luxury-cream border border-gray-50 flex items-center justify-center">
+      {/* Image Section */}
+      <div className="relative aspect-square w-full overflow-hidden bg-luxury-cream flex items-center justify-center">
+
         {/* Wishlist Button */}
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleWishlist(product.id);
-          }}
-          className="absolute top-2 right-2 z-10 p-1 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-luxury-orange shadow-sm transition-all duration-300"
-          title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+          onClick={handleWishlist}
+          className="absolute top-2 right-2 z-10 p-1 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-luxury-orange shadow-sm transition-colors duration-200"
+          title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
         >
           <Heart
             size={14}
-            className={`transition-colors ${isWishlisted ? 'fill-pink-700 text-luxury-orange' : ''}`}
+            className={isWishlisted ? 'fill-pink-700 text-luxury-orange' : ''}
           />
         </button>
 
         {/* Bestseller Badge */}
         {product.isBestseller && (
-          <span className="absolute top-2 left-1 z-10 bg-luxury-gold text-luxury-cream text-[8px] lg:text-[8px] font-bold tracking-widest uppercase px-2 py-1">
+          <span className="absolute top-2 left-1 z-10 bg-luxury-gold text-luxury-cream text-[8px] font-bold tracking-widest uppercase px-2 py-1">
             Best-seller
           </span>
         )}
 
-        {/* The Image with Simulated Leather Dye Colors */}
-        <div 
-          onClick={() => onViewDetail(product, selectedColor)}
-          className="w-full h-full cursor-pointer overflow-hidden relative flex items-center justify-center"
+        {/* Main Image */}
+        <div
+          onClick={handleViewDetail}
+          className="w-full h-full cursor-pointer overflow-hidden relative"
         >
-          <motion.img
-            src={selectedColor.imageUrl}
-            alt={`${product.name} in ${selectedColor.name}`}
-            animate={{ scale: isHovered ? 1.06 : 1 }}
-            transition={{ duration: 0.6 }}
-            className={`object-cover w-full h-full transition-all duration-700`}
-            style={{ filter: getFilterStyle(selectedColor.hex) }}
-            referrerPolicy="no-referrer"
-          />
-          {/* Subtle leather texture overlay on hover */}
-          {isHovered && (
-            <div className="absolute inset-0 bg-luxury-charcoal/5 pointer-events-none transition-opacity duration-500" />
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.img
+              key={activeImage}
+              src={activeImage}
+              alt={`${product.name} — view ${activeImageIndex + 1}`}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                scale: isHovered ? 1.05 : 1,
+              }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="object-cover w-full h-full will-change-transform"
+              referrerPolicy="no-referrer"
+              loading="lazy"
+              decoding="async"
+            />
+          </AnimatePresence>
+
+          {/* Dot Indicators */}
+          {allImages.length > 1 && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10 pointer-events-none">
+              {allImages.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`block rounded-full transition-all duration-200 ${
+                    activeImageIndex === idx
+                      ? 'w-3 h-1.5 bg-luxury-charcoal'
+                      : 'w-1.5 h-1.5 bg-luxury-charcoal/30'
+                  }`}
+                />
+              ))}
+            </div>
           )}
         </div>
 
-        {/* Quick View Button overlay */}
-        <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-white/95 to-white/0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 hidden sm:flex justify-center items-center z-10">
+        {/* Quick View Overlay */}
+        <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-white/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 hidden sm:flex justify-center items-center z-10">
           <button
-            onClick={() => onViewDetail(product, selectedColor)}
-            className="w-full py-2.5 bg-luxury-charcoal text-luxury-cream text-[10px] tracking-luxury font-medium uppercase hover:bg-luxury-orange transition-colors duration-300 flex items-center justify-center space-x-1"
+            onClick={handleViewDetail}
+            className="w-full py-2 bg-luxury-charcoal text-luxury-cream text-[10px] tracking-luxury font-medium uppercase hover:bg-luxury-orange transition-colors duration-200 flex items-center justify-center gap-1"
           >
             <span>CUSTOMIZE & CONFIGURE</span>
             <ArrowUpRight size={12} />
@@ -115,13 +114,14 @@ export default function ProductCard({
         </div>
       </div>
 
-      {/* Product Information Section */}
+      {/* Info Section */}
       <div className="pt-4 flex flex-col justify-between flex-grow">
-        <div className="space-y-1 cursor-pointer" onClick={() => onViewDetail(product, selectedColor)}>
+
+        <div className="space-y-1 cursor-pointer" onClick={handleViewDetail}>
           <span className="text-[9px] tracking-widest text-gray-400 font-medium uppercase block">
             {product.leatherType}
           </span>
-          <h3 className="text-sm font-medium text-luxury-charcoal uppercase tracking-wider group-hover:text-luxury-orange transition-colors duration-300 font-sans">
+          <h3 className="text-sm font-medium text-luxury-charcoal uppercase tracking-wider group-hover:text-luxury-orange transition-colors duration-200 font-sans">
             {product.name}
           </h3>
           <p className="text-xs text-gray-500 line-clamp-2 font-light leading-relaxed mt-1">
@@ -129,38 +129,70 @@ export default function ProductCard({
           </p>
         </div>
 
-        {/* Color Swatch Selectors */}
-        <div className="mt-4 pt-4 border-t border-luxury-sand flex items-center justify-between">
-          <div className="flex items-center space-x-1.5" id={`swatches-${product.id}`}>
-            {product.colors.map((color) => (
-              <button
-                key={color.name}
-                onClick={() => setSelectedColor(color)}
-                className={`w-4 h-4 rounded-full border transition-all duration-300 flex items-center justify-center ${
-                  selectedColor.name === color.name
-                    ? 'border-luxury-charcoal scale-110 ring-2 ring-luxury-sand ring-offset-1'
-                    : 'border-transparent hover:scale-105'
-                }`}
-                title={color.name}
-              >
-                <span
-                  className="w-3.5 h-3.5 rounded-full block shadow-inner"
-                  style={{ backgroundColor: color.hex }}
-                />
-              </button>
+        {/* Thumbnails + Price */}
+        <div className="mt-4 pt-4 border-t border-luxury-sand flex items-center justify-between gap-2">
+
+          <div className="flex items-center gap-1.5 overflow-hidden">
+            {allImages.slice(0, 5).map((img, idx) => (
+              <ThumbnailButton
+                key={idx}
+                img={img}
+                idx={idx}
+                productName={product.name}
+                isActive={activeImageIndex === idx}
+                onClick={setActiveImageIndex}
+              />
             ))}
-            <span className="text-[10px] text-gray-400 font-light truncate max-w-[80px] sm:max-w-[100px] pl-1 hidden sm:inline">
-              {selectedColor.name.split(' (')[0]}
-            </span>
           </div>
 
-          <div className="text-right">
+          <div className="text-right flex-shrink-0">
             <span className="text-sm font-semibold text-luxury-charcoal tracking-wider">
-              ${product.price}
+              ${product.price.toLocaleString()}
             </span>
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
-}
+});
+
+// Isolated thumbnail to avoid re-rendering entire card on hover
+const ThumbnailButton = memo(function ThumbnailButton({
+  img,
+  idx,
+  productName,
+  isActive,
+  onClick,
+}: {
+  img: string;
+  idx: number;
+  productName: string;
+  isActive: boolean;
+  onClick: (idx: number) => void;
+}) {
+  return (
+    <button
+      onClick={() => onClick(idx)}
+      className={`relative flex-shrink-0 w-7 h-7 overflow-hidden border transition-all duration-200 ${
+        isActive
+          ? 'border-luxury-charcoal scale-110 ring-1 ring-luxury-sand ring-offset-1'
+          : 'border-luxury-sand/60 hover:border-luxury-charcoal/40 hover:scale-105 opacity-60 hover:opacity-100'
+      }`}
+      title={`View image ${idx + 1}`}
+    >
+      <img
+        src={img}
+        alt={`${productName} thumbnail ${idx + 1}`}
+        className="object-cover w-full h-full"
+        referrerPolicy="no-referrer"
+        loading="lazy"
+        decoding="async"
+      />
+      {isActive && (
+        <span className="absolute inset-0 bg-luxury-gold/10 pointer-events-none" />
+      )}
+    </button>
+  );
+});
+
+export default ProductCard;

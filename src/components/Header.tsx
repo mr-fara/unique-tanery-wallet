@@ -65,12 +65,12 @@ export default function Header({
 
   const navItems = [
     { id: 'all', label: 'All Collections' },
-    { id: 'bags', label: "Women's Bags" },
-    { id: 'wallets', label: 'Wallets & Cards' },
+    { id: 'bags', label: "Women's Collections" },
+    { id: 'wallets', label: "Men's Collections" },
     { id: 'watch-straps', label: 'Watch Straps' },
     { id: 'gifts', label: 'Gift Sets' },
-    { id: 'atelier', label: 'The Atelier' },
-    { id: 'commissions', label: 'Bespoke' },
+    { id: 'atelier', label: 'About Us' },
+    { id: 'commissions', label: 'Custom Orders' },
   ];
 
   const handleNavClick = (id: string) => {

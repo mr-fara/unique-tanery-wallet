@@ -9,7 +9,7 @@ import CartDrawer from './components/CartDrawer';
 import CustomCommission from './components/CustomCommission';
 import Footer from './components/Footer';
 import { PRODUCTS } from './data';
-import { Product, ProductColor, CustomizationOptions, CartItem } from './types';
+import { Product, CustomizationOptions, CartItem } from './types';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, SlidersHorizontal, ArrowRight, X } from 'lucide-react';
 
@@ -18,14 +18,13 @@ export default function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [initialColorForDetail, setInitialColorForDetail] =
-    useState<ProductColor | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const [selectedMaterialFilter, setSelectedMaterialFilter] = useState('all');
   const [selectedSort, setSelectedSort] = useState('featured');
   const [filterOpen, setFilterOpen] = useState(false);
 
+  // ── Wishlist ──────────────────────────────────────────────────────────────
   const handleToggleWishlist = (productId: string) => {
     setWishlist((prev) =>
       prev.includes(productId)
@@ -34,20 +33,24 @@ export default function App() {
     );
   };
 
-  const handleOpenProductDetail = (
-    product: Product,
-    initialColor: ProductColor
-  ) => {
+  // ── Product Detail ────────────────────────────────────────────────────────
+  const handleOpenProductDetail = (product: Product) => {
     setSelectedProduct(product);
-    setInitialColorForDetail(initialColor);
   };
 
+  const handleCloseProductDetail = () => {
+    setSelectedProduct(null);
+  };
+
+  // ── Cart ──────────────────────────────────────────────────────────────────
   const handleAddToBag = (
     product: Product,
-    selectedColor: ProductColor,
     customization: CustomizationOptions
   ) => {
-    const cartItemId = `${product.id}-${selectedColor.name}-${customization.stitching}-${customization.hardware || ''}-${customization.monogramText || ''}-${customization.foilColor}`;
+    const cartItemId = `${product.id}-${customization.stitching}-${
+      customization.hardware || ''
+    }-${customization.monogramText || ''}-${customization.foilColor}`;
+
     setCart((prevCart) => {
       const existingItemIdx = prevCart.findIndex(
         (item) => item.cartItemId === cartItemId
@@ -61,7 +64,6 @@ export default function App() {
           cartItemId,
           product,
           quantity: 1,
-          selectedColor,
           customization,
         };
         return [...prevCart, newItem];
@@ -86,25 +88,17 @@ export default function App() {
 
   const handleClearCart = () => setCart([]);
 
+  // ── Filtering & Sorting ───────────────────────────────────────────────────
   const filteredProducts = PRODUCTS.filter((product) => {
     const categoryMatch =
       activeTab === 'all' || product.category === activeTab;
     if (selectedMaterialFilter === 'all') return categoryMatch;
     if (selectedMaterialFilter === 'calfskin')
-      return (
-        categoryMatch &&
-        product.leatherType.toLowerCase().includes('calfskin')
-      );
+      return categoryMatch && product.leatherType.toLowerCase().includes('calfskin');
     if (selectedMaterialFilter === 'alligator')
-      return (
-        categoryMatch &&
-        product.leatherType.toLowerCase().includes('alligator')
-      );
+      return categoryMatch && product.leatherType.toLowerCase().includes('alligator');
     if (selectedMaterialFilter === 'goatskin')
-      return (
-        categoryMatch &&
-        product.leatherType.toLowerCase().includes('goatskin')
-      );
+      return categoryMatch && product.leatherType.toLowerCase().includes('goatskin');
     return categoryMatch;
   }).sort((a, b) => {
     if (selectedSort === 'price-low') return a.price - b.price;
@@ -114,18 +108,14 @@ export default function App() {
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
+  // ── Helpers ───────────────────────────────────────────────────────────────
   const getCatalogTitle = () => {
     switch (activeTab) {
-      case 'bags':
-        return "Women's Fine Bags";
-      case 'wallets':
-        return 'Seamless Wallets';
-      case 'watch-straps':
-        return 'Watch Straps';
-      case 'gifts':
-        return 'Premium Gifts';
-      default:
-        return 'The Craft Collection';
+      case 'bags': return "Women's Fine Bags";
+      case 'wallets': return 'Seamless Wallets';
+      case 'watch-straps': return 'Watch Straps';
+      case 'gifts': return 'Premium Gifts';
+      default: return 'The Craft Collection';
     }
   };
 
@@ -142,12 +132,8 @@ export default function App() {
   return (
     <div className="relative min-h-screen text-[#1C1C1C] selection:bg-[#C9A96E] selection:text-white flex flex-col">
 
-      {/* ── Background Images: mobile (bg5) & desktop (bg6) ── */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 z-0 pointer-events-none"
-      >
-        {/* Mobile background: bg5.png (shown below md) */}
+      {/* ── Background ─────────────────────────────────────────────────────── */}
+      <div aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none">
         <div
           className="absolute inset-0 block md:hidden"
           style={{
@@ -158,7 +144,6 @@ export default function App() {
             backgroundAttachment: 'scroll',
           }}
         />
-        {/* Desktop background: bg6.png (shown at md and above) */}
         <div
           className="absolute inset-0 hidden md:block"
           style={{
@@ -169,16 +154,7 @@ export default function App() {
             backgroundAttachment: 'fixed',
           }}
         />
-
-        {/* ── Warm cream tint overlay (tones image to match brand palette) ── */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'rgba(250, 247, 242, 0.82)',
-          }}
-        />
-
-        {/* ── Subtle noise/texture feel via gradient layers ── */}
+        <div className="absolute inset-0" style={{ background: 'rgba(250, 247, 242, 0.82)' }} />
         <div
           className="absolute inset-0"
           style={{
@@ -186,8 +162,6 @@ export default function App() {
               'linear-gradient(180deg, rgba(250,247,242,0.55) 0%, rgba(250,247,242,0.10) 30%, rgba(250,247,242,0.10) 70%, rgba(250,247,242,0.75) 100%)',
           }}
         />
-
-        {/* ── Gold vignette edges ── */}
         <div
           className="absolute inset-0"
           style={{
@@ -195,8 +169,6 @@ export default function App() {
               'radial-gradient(ellipse at center, transparent 50%, rgba(180,140,80,0.13) 100%)',
           }}
         />
-
-        {/* ── Subtle top gold bar accent ── */}
         <div
           className="absolute top-0 left-0 right-0 h-[2px]"
           style={{
@@ -206,7 +178,7 @@ export default function App() {
         />
       </div>
 
-      {/* ── All page content ── */}
+      {/* ── Page Content ───────────────────────────────────────────────────── */}
       <div className="relative z-10 flex flex-col min-h-screen">
 
         {/* ── Header ── */}
@@ -222,7 +194,7 @@ export default function App() {
           wishlistCount={wishlist.length}
         />
 
-        {/* ── Hero (all tab only) ── */}
+        {/* ── Hero ── */}
         <AnimatePresence mode="wait">
           {activeTab === 'all' && (
             <motion.div
@@ -243,7 +215,7 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        {/* ── Main Content ── */}
+        {/* ── Main ── */}
         <main id="main-focus" className="flex-grow w-full">
 
           {/* Atelier */}
@@ -301,9 +273,8 @@ export default function App() {
                           {getCatalogTitle()}
                         </h2>
                         <p className="text-[11px] sm:text-xs text-[#9E9E9E] font-light max-w-md leading-relaxed">
-                          Each model is designed around absolute lines, featuring
-                          selected leather, raw beeswax edge finishes, and the
-                          iconic linen saddle-stitch.
+                          Each model is designed around absolute lines, featuring selected
+                          leather, raw beeswax edge finishes, and the iconic linen saddle-stitch.
                         </p>
                       </div>
                       <div className="self-start sm:self-end shrink-0">
@@ -320,7 +291,8 @@ export default function App() {
 
                   {/* ── Filter Bar ── */}
                   <div className="mb-8 sm:mb-10">
-                    {/* Mobile: toggle button */}
+
+                    {/* Mobile toggle */}
                     <div className="flex sm:hidden justify-between items-center mb-3">
                       <button
                         onClick={() => setFilterOpen(!filterOpen)}
@@ -345,7 +317,7 @@ export default function App() {
                       )}
                     </div>
 
-                    {/* Mobile: expandable filter panel */}
+                    {/* Mobile expandable panel */}
                     <AnimatePresence>
                       {filterOpen && (
                         <motion.div
@@ -416,7 +388,7 @@ export default function App() {
                       )}
                     </AnimatePresence>
 
-                    {/* Desktop: inline filter bar */}
+                    {/* Desktop inline bar */}
                     <div className="hidden sm:flex flex-wrap items-center gap-3">
                       <div className="flex items-center gap-1.5">
                         <SlidersHorizontal size={12} className="text-[#C9A96E]" />
@@ -543,12 +515,11 @@ export default function App() {
                               The Story of Natural Dyeing & Vegetable Tanning
                             </h3>
                             <p className="text-[11px] sm:text-xs text-[#6B6B6B] font-light leading-relaxed max-w-lg">
-                              Unique Tany leather dyes utilize vegetable bark, walnut
-                              husks, and oak tannin rather than harsh petroleum salts.
-                              This produces warm, rich, transparent color tones that do
-                              not cover the natural pores and scars of the calfskin hide,
-                              allowing each piece to absorb natural sunlight and breathe
-                              with age.
+                              Unique Tany leather dyes utilize vegetable bark, walnut husks, and oak
+                              tannin rather than harsh petroleum salts. This produces warm, rich,
+                              transparent color tones that do not cover the natural pores and scars
+                              of the calfskin hide, allowing each piece to absorb natural sunlight
+                              and breathe with age.
                             </p>
                             <button
                               onClick={() => handleTabChange('atelier')}
@@ -576,7 +547,7 @@ export default function App() {
                     </>
                   )}
 
-                  {/* ── Bottom CTA strip ── */}
+                  {/* ── Bottom CTA ── */}
                   <div className="mt-10 sm:mt-14 pt-8 sm:pt-10 border-t border-[#E8E0D4]">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-8">
                       <div className="text-center sm:text-left space-y-1">
@@ -613,7 +584,7 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        {/* ── Testimonial Section ── */}
+        {/* ── Testimonials ── */}
         <AnimatePresence mode="wait">
           {activeTab === 'all' && (
             <motion.div
@@ -649,22 +620,18 @@ export default function App() {
         </AnimatePresence>
       </div>
 
-      {/* ── Product Detail Drawer ── */}
+      {/* ══ Product Detail Drawer ════════════════════════════════════════════ */}
       <AnimatePresence>
-        {selectedProduct && initialColorForDetail && (
+        {selectedProduct && (
           <ProductDetailDrawer
             product={selectedProduct}
-            initialColor={initialColorForDetail}
-            onClose={() => {
-              setSelectedProduct(null);
-              setInitialColorForDetail(null);
-            }}
+            onClose={handleCloseProductDetail}
             onAddToBag={handleAddToBag}
           />
         )}
       </AnimatePresence>
 
-      {/* ── Cart Drawer ── */}
+      {/* ══ Cart Drawer ══════════════════════════════════════════════════════ */}
       <CartDrawer
         isOpen={cartOpen}
         onClose={() => setCartOpen(false)}
@@ -674,7 +641,7 @@ export default function App() {
         onClearCart={handleClearCart}
       />
 
-      {/* ── Wishlist Drawer ── */}
+      {/* ══ Wishlist Drawer ══════════════════════════════════════════════════ */}
       <AnimatePresence>
         {wishlistOpen && (
           <div className="fixed inset-0 z-50 flex justify-end">
@@ -693,7 +660,7 @@ export default function App() {
               transition={{ type: 'tween', duration: 0.38, ease: [0.32, 0.72, 0, 1] }}
               className="relative w-full max-w-xs xs:max-w-sm sm:max-w-md bg-[#FAF7F2] h-full shadow-2xl flex flex-col z-10 border-l border-[#E8E0D4]"
             >
-              {/* Panel Header */}
+              {/* Wishlist Header */}
               <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-[#E8E0D4] bg-white flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-full bg-[#FAF7F2] border border-[#E8E0D4] flex items-center justify-center">
@@ -704,7 +671,8 @@ export default function App() {
                       Your Favorites
                     </h2>
                     <p className="text-[9px] text-[#9E9E9E] tracking-wider">
-                      {wishlist.length} {wishlist.length === 1 ? 'piece' : 'pieces'} saved
+                      {wishlist.length}{' '}
+                      {wishlist.length === 1 ? 'piece' : 'pieces'} saved
                     </p>
                   </div>
                 </div>
@@ -716,7 +684,7 @@ export default function App() {
                 </button>
               </div>
 
-              {/* Items */}
+              {/* Wishlist Items */}
               <div className="flex-grow overflow-y-auto">
                 {wishlist.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full py-20 px-6 text-center space-y-4">
@@ -751,14 +719,16 @@ export default function App() {
                           transition={{ duration: 0.3 }}
                           className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white border border-[#E8E0D4] hover:border-[#C9A96E]/50 transition-colors group/item"
                         >
-                          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#FAF7F2] border border-[#E8E0D4] overflow-hidden shrink-0 relative">
+                          {/* ✅ Uses imageUrl directly — no colors array */}
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#FAF7F2] border border-[#E8E0D4] overflow-hidden shrink-0">
                             <img
-                              src={p.colors[0].imageUrl}
+                              src={p.imageUrl}
                               alt={p.name}
                               className="object-cover w-full h-full group-hover/item:scale-105 transition-transform duration-500"
                               referrerPolicy="no-referrer"
                             />
                           </div>
+
                           <div className="flex-grow min-w-0 space-y-0.5">
                             <span className="block text-[8px] sm:text-[9px] text-[#9E9E9E] font-semibold uppercase tracking-wider truncate">
                               {p.leatherType}
@@ -770,10 +740,12 @@ export default function App() {
                               ${p.price.toLocaleString()}
                             </span>
                           </div>
+
                           <div className="flex flex-col gap-1.5 shrink-0">
+                            {/* ✅ Opens detail with just product — no color arg */}
                             <button
                               onClick={() => {
-                                handleOpenProductDetail(p, p.colors[0]);
+                                handleOpenProductDetail(p);
                                 setWishlistOpen(false);
                               }}
                               className="px-2.5 py-1.5 bg-[#1C1C1C] hover:bg-[#C9A96E] text-white text-[8px] font-bold tracking-[0.15em] uppercase transition-all duration-200"
@@ -794,7 +766,7 @@ export default function App() {
                 )}
               </div>
 
-              {/* Panel Footer */}
+              {/* Wishlist Footer */}
               {wishlist.length > 0 && (
                 <div className="px-4 sm:px-6 py-4 border-t border-[#E8E0D4] bg-white shrink-0 space-y-2">
                   <button
